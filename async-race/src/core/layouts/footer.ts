@@ -30,7 +30,7 @@ export default class Footer extends Component {
         links.forEach((item) => {
             const contactLink = document.createElement('a');
             contactLink.addEventListener('click', () => window.open(item.link));
-            contactLink.textContent = item.text;
+            contactLink.innerHTML = item.text;
             contactsItem.append(contactLink);
         });
     }

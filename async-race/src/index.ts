@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-unresolved
-import './index.css';
+import './style.css';
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import App from './app/app';
 
