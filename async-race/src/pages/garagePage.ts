@@ -6,7 +6,7 @@ export default class Garage extends Page {
         Title: 'Garage Page';
     };
 
-    getGaragePageContainer() {
+    async getGaragePageContainer(): Promise<HTMLElement> {
         const title = this.createHeaderTitle(Garage.TextObject.Title);
         this.container.append(title);
         return this.container;

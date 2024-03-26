@@ -6,7 +6,7 @@ export default class Winners extends Page {
         Title: 'Winners Page';
     };
 
-    getGaragePageContainer() {
+    async getWinnersPageContainer(): Promise<HTMLElement> {
         const title = this.createHeaderTitle(Winners.TextObject.Title);
         this.container.append(title);
         return this.container;
