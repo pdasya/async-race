@@ -1,0 +1,115 @@
+:root {
+    --white: #FFFFFA;
+    --black: #4A4A48;
+    --primary: #A8DADC;
+    --secondary: #F4A261;
+    --filterTitle: #F1FAEE;
+    --background: #B3D4E0;
+    --labelActive: var(--white);
+    --labelBackground: #A8DADC;
+    --labelBackgroundActive: #F4A261;
+    --buttonBackground: #A8DADC;
+    --buttonColor: var(--black);
+    --buttonBackgroundHover: var(--black);
+    --buttonColorHover: var(--white);
+    --gray: #CBD4C2;
+    --darkgray: #9AA5A1;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+.page-wrapper {
+    min-height: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    background-color: var(--background);
+    padding: 30px;
+    text-align: center;
+}
+
+.header__nav {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.header a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-right: 20px;
+    width: 150px;
+    height: fit-content;
+    background-color: var(--buttonBackground);
+    border: 2px solid var(--white);
+    border-radius: 30px;
+    padding: 5px;
+}
+
+.header a:hover {
+    color: var(--primary);
+    background-color: var(--buttonBackgroundHover);
+    border: 2px solid var(--primary);
+}
+
+.main {
+    flex: 1 1 auto;
+}
+
+.footer {
+    background-color: var(--background);
+    padding: 30px;
+    text-align: center;
+}
+
+.footer__contacts {
+    display: flex;
+    align-items: center;
+}
+
+.footer__contacts-item {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer__contacts-item a {
+    color: #322e37;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.footer__contacts-item a:hover {
+    color: var(--white);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.footer__contacts-item a .school__logo {
+    width: 80px;
+    height: 25px;
+}
+
+.footer__contacts-item a .logo:hover {
+    mix-blend-mode: color-burn;
+}
+
+
+
+
