@@ -14,7 +14,7 @@ export default class Component {
         this.container.innerText = text;
     }
 
-    render() {
+    getContainer() {
         return this.container;
     }
 }

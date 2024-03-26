@@ -15,7 +15,7 @@ export default class Page {
         return headerTitle;
     }
 
-    render() {
+    getContainer() {
         return this.container;
     }
 }
