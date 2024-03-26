@@ -4,4 +4,8 @@ const enum PageIds {
     Default = 'current-page',
 }
 
-export default PageIds;
+const enum Links {
+    author = 'https://github.com/pdasya',
+    course = 'https://rs.school/',
+}
+export { PageIds, Links };
