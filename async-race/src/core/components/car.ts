@@ -1,9 +1,25 @@
 // eslint-disable-next-line import/no-unresolved, import/extensions
-import Component from '../templates/component';
+import Component from '@core/templates/component';
 // eslint-disable-next-line import/no-unresolved, import/extensions
-import finish from '../../assets/images/finish-flag.svg';
+import finish from '@assets/images/finish-flag.svg';
+// eslint-disable-next-line import/no-unresolved, import/extensions
+import EventObserver from '@core/eventObservers/eventObserver';
+// eslint-disable-next-line import/no-unresolved, import/extensions
+import Database from '@database/database';
+// eslint-disable-next-line import/no-unresolved, import/extensions
+import Store from '@core/store/store';
 
 export default class Car extends Component {
+    callback: () => void;
+
+    event: EventObserver<unknown>;
+
+    constructor(tagName: string, className: string, callback: () => void, event: EventObserver<unknown>) {
+        super(tagName, className);
+        this.callback = callback;
+        this.event = event;
+    }
+
     generateButton(name: string, className: string): HTMLButtonElement {
         const button = document.createElement('button');
         button.classList.add(className);
@@ -23,8 +39,18 @@ export default class Car extends Component {
         carTitle.classList.add('car__title');
         carTitle.textContent = name;
         container.append(select, remove, carTitle);
-
+        this.enableListenersOnButton(remove, id);
         return container;
+    }
+
+    enableListenersOnButton(button: HTMLButtonElement, id: number): void {
+        const db = new Database();
+        const event = Store.store.get('event');
+        if (!event) throw new Error('Event is undefined');
+        button.addEventListener('click', async () => {
+            await db.deleteCar(id);
+            event.notify('update');
+        });
     }
 
     getCarImage(color: string): string {

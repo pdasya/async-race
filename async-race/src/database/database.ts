@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-unresolved, import/extensions
-import TGetCars from '../core/types/types';
+import TGetCars from '@core/types/types';
 // eslint-disable-next-line import/no-unresolved, import/extensions
-import { Endpoints, Methods } from '../core/types/enum';
+import { Endpoints, Methods } from '@core/types/enum';
 
 const BASE = 'http://localhost:3000';
 

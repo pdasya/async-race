@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-unresolved, import/extensions
-import Page from '../core/templates/page';
+import Page from '@core/templates/page';
 
 export default class Winners extends Page {
     static TextObject: {

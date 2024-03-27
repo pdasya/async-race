@@ -23,6 +23,13 @@ const baseConfig = {
     },
     resolve: {
         extensions: ['.ts', '.js'],
+        alias: {
+            '@': path.resolve(__dirname, 'src'),
+            '@database': path.resolve(__dirname, 'src/database'),
+            '@assets': path.resolve(__dirname, 'src/assets'),
+            '@core': path.resolve(__dirname, 'src/core'),
+            '@pages': path.resolve(__dirname, 'src/pages'),
+        },
     },
     output: {
         filename: 'index.js',
@@ -39,7 +46,8 @@ const baseConfig = {
     ],
 };
 
-module.exports = ({ mode }) => {
+module.exports = (env = {}) => {
+    const { mode } = env;
     const isProductionMode = mode === 'prod';
     // eslint-disable-next-line global-require
     const envConfig = isProductionMode ? require('./webpack.prod.config') : require('./webpack.dev.config');

@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-unresolved, import/extensions
-import Component from '../templates/component';
+import Component from '@core/templates/component';
 // eslint-disable-next-line import/no-unresolved, import/extensions
-import { PageIds } from '../types/enum';
+import { PageIds } from '@core/types/enum';
 
 const Buttons = [
     {

@@ -1,9 +1,6 @@
-// eslint-disable-next-line import/no-unresolved, import/extensions
-import Component from '../templates/component';
-// eslint-disable-next-line import/no-unresolved, import/extensions
-import DataBase from '../../database/database';
-// eslint-disable-next-line import/no-unresolved, import/extensions
-import Store from '../store/store';
+import Component from '@core/templates/component';
+import DataBase from '@database/database';
+import Store from '@core/store/store';
 
 export default class GeneratorCar extends Component {
     protected static cars: HTMLElement[] = [];

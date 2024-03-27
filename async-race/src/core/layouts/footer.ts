@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-unresolved, import/extensions
-import Component from '../templates/component';
+import Component from '@core/templates/component';
 // eslint-disable-next-line import/no-unresolved, import/extensions
-import { Links } from '../types/enum';
+import { Links } from '@core/types/enum';
 
 const links = [
     {
