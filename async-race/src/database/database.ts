@@ -15,7 +15,7 @@ export default class Database {
     };
 
     createCar = async (name: string, color: string): Promise<void> => {
-        await fetch(`${BASE}/garage`, {
+        await fetch(`${BASE}/${Endpoints.garage}`, {
             method: Methods.POST,
             headers: {
                 'Content-Type': 'application/json',
