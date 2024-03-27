@@ -27,7 +27,7 @@ export default class Database {
         });
     };
 
-    updateCar = async (id: number, name: string, color: string): Promise<void> => {
+    updateCar = async (name: string, color: string, id: string): Promise<void> => {
         await fetch(`${BASE}/${Endpoints.garage}/${id}`, {
             method: Methods.PUT,
             headers: {
@@ -40,7 +40,7 @@ export default class Database {
         });
     };
 
-    deleteCar = async (id: number): Promise<void> => {
+    deleteCar = async (id: string): Promise<void> => {
         await fetch(`${BASE}/${Endpoints.garage}/${id}`, {
             method: Methods.DELETE,
         });

@@ -1,20 +1,16 @@
+/* eslint-disable import/no-unresolved */
 import Component from '@core/templates/component';
 import DataBase from '@database/database';
 import Store from '@core/store/store';
+import { Endpoints } from '@core/types/enum';
+import { ICar } from '@core/types/interfaces';
+// eslint-disable-next-line import/extensions
+import CarRandomGenerate from '@/supporters/generateRandomCars/generateRandomCars';
 
 export default class GeneratorCar extends Component {
     protected static cars: HTMLElement[] = [];
 
-    generateGeneratorCars(
-        name: string,
-        cb: (
-            button: HTMLButtonElement,
-            title: HTMLInputElement,
-            color: HTMLInputElement,
-            method: (name: string, color: string) => Promise<void>
-        ) => void,
-        method: (name: string, color: string) => Promise<void>
-    ): HTMLDivElement {
+    generateGeneratorCars(name: string) {
         const divInput = document.createElement('div');
         const inputForTitle = document.createElement('input');
         const inputForColor = document.createElement('input');
@@ -29,30 +25,59 @@ export default class GeneratorCar extends Component {
         inputForColor.classList.add('car-generator__color');
         inputForColor.setAttribute('type', 'color');
 
-        cb(button, inputForTitle, inputForColor, method);
         button.classList.add('car-generator__input-button');
         button.innerHTML = name;
 
         divInput.append(inputForTitle, inputForColor, button);
-        return divInput;
+        return {
+            divInput,
+            inputForTitle,
+            inputForColor,
+            button,
+        };
     }
 
-    enableListenersOnButton(
-        button: HTMLButtonElement,
-        title: HTMLInputElement,
-        color: HTMLInputElement,
-        method: (name: string, color: string) => Promise<void>
-    ): void {
-        const event = Store.store.get('event');
-        if (event === undefined) {
-            throw new Error('Event is undefined');
-        }
-        button.addEventListener('click', () => {
-            (async () => {
-                await method(title.value, color.value);
-                event.notify('update');
-            })();
+    async getCreateInterface(): Promise<HTMLElement> {
+        const create = this.generateGeneratorCars('create');
+        const database = new DataBase();
+
+        const event = Store.event.get('event');
+        if (event === undefined) throw new Error('Event is undefined');
+
+        create.button.addEventListener('click', async () => {
+            await database.createCar(create.inputForTitle.value, create.inputForColor.value);
+            event.notify('update');
         });
+        return create.divInput;
+    }
+
+    async getUpdateInterface(): Promise<HTMLElement> {
+        const update = this.generateGeneratorCars('update');
+        const database = new DataBase();
+
+        const event = Store.event.get('event');
+        if (event === undefined) throw new Error('Event is undefined');
+
+        const carBefore = Store.getFromStore('car');
+        const id = carBefore?.id || '1';
+
+        update.button.addEventListener('click', async () => {
+            await database.updateCar(update.inputForTitle.value, update.inputForColor.value, id);
+            event.notify('update');
+        });
+
+        const cars = await database.getCars(Endpoints.garage, 1);
+
+        cars.items.forEach((car) => {
+            if (car.id === id) {
+                update.inputForTitle.value = car?.name || '';
+                update.inputForColor.value = car?.color || '#000000';
+
+                Store.addToStore('car', car);
+            }
+        });
+
+        return update.divInput;
     }
 
     generateButton(name: string): HTMLButtonElement {
@@ -65,19 +90,34 @@ export default class GeneratorCar extends Component {
     generateButtons(): HTMLElement {
         const wrapper = document.createElement('div');
         wrapper.classList.add('car-generator__buttons');
-
         const race = this.generateButton('race');
         const reset = this.generateButton('reset');
         const generateCars = this.generateButton('generate cars');
-
+        this.generateRandomCars(generateCars);
         wrapper.append(race, reset, generateCars);
         return wrapper;
     }
 
-    appendAll() {
+    async generateRandomCars(button: HTMLButtonElement): Promise<void> {
         const db = new DataBase();
-        const create = this.generateGeneratorCars('create', this.enableListenersOnButton, db.createCar);
-        const update = this.generateGeneratorCars('update', this.enableListenersOnButton, db.createCar);
+        const event = Store.event.get('event');
+        if (!event) throw new Error('Event is undefined');
+        const oneHundredCars: ICar[] = new CarRandomGenerate().generateOneHundredCars();
+
+        button.addEventListener('click', async () => {
+            Promise.all(
+                oneHundredCars.map(async (car) => {
+                    await db.createCar(car.name, car.color);
+                })
+            )
+                .then(() => event.notify('updateCars'))
+                .catch((error) => error);
+        });
+    }
+
+    async appendAll() {
+        const create = await this.getCreateInterface();
+        const update = await this.getUpdateInterface();
         const buttons = this.generateButtons();
         this.container.append(create, update, buttons);
     }
