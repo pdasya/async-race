@@ -1,7 +1,8 @@
-// eslint-disable-next-line import/no-unresolved, import/extensions
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
 import TGetCars from '@core/types/types';
-// eslint-disable-next-line import/no-unresolved, import/extensions
 import { Endpoints, Methods } from '@core/types/enum';
+import { ICar } from '@/core/types/interfaces';
 
 const BASE = 'http://127.0.0.1:3000';
 
@@ -14,7 +15,7 @@ export default class Database {
         };
     };
 
-    getCar = async (id: string) => {
+    getCar = async (id: string): Promise<ICar> => {
         const response = await fetch(`${BASE}/${Endpoints.garage}/${id}`);
         return response.json();
     };
@@ -63,5 +64,49 @@ export default class Database {
             method: Methods.PATCH,
         });
         return response;
+    };
+
+    getWinners = async (page: number | string, limit: number | string = 10): Promise<TGetCars> => {
+        const response = await fetch(`${BASE}/${Endpoints.winners}?_page=${page}&_limit=${limit}`);
+        return {
+            items: await response.json(),
+            total: response.headers.get('X-Total-Count'),
+        };
+    };
+
+    getWinner = async (id: string): Promise<ICar> => {
+        const response = await fetch(`${BASE}/${Endpoints.winners}/${id}`);
+        return response.json();
+    };
+
+    updateWinner = async (id: string, body: { wins: number; time: number }): Promise<ICar> => {
+        const response = await fetch(`${BASE}/${Endpoints.winners}/${id}`, {
+            method: Methods.PUT,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        });
+        return response.json();
+    };
+
+    deleteWinner = async (id: string): Promise<void> => {
+        await fetch(`${BASE}/${Endpoints.winners}/${id}`, {
+            method: Methods.DELETE,
+        });
+    };
+
+    createWinner = async (id: number, wins: number, time: number): Promise<void> => {
+        await fetch(`${BASE}/${Endpoints.winners}`, {
+            method: Methods.POST,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id,
+                wins,
+                time,
+            }),
+        });
     };
 }

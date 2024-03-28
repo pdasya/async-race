@@ -3,6 +3,8 @@ export interface ICar {
     name: string;
     id?: string;
     color: string;
+    wins?: number;
+    time?: number;
 }
 
 export interface ICarRandomGenerate {
