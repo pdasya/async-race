@@ -1,14 +1,9 @@
-// eslint-disable-next-line import/no-unresolved
+/* eslint-disable import/no-unresolved */
 import Component from '@core/templates/component';
-// eslint-disable-next-line import/no-unresolved
 import finish from '@assets/images/finish-flag.svg';
-// eslint-disable-next-line import/no-unresolved
 import EventObserver from '@core/eventObservers/eventObserver';
-// eslint-disable-next-line import/no-unresolved
 import Database from '@database/database';
-// eslint-disable-next-line import/no-unresolved
 import Store from '@core/store/store';
-// eslint-disable-next-line import/no-unresolved
 import { ICar } from '@core/types/interfaces';
 
 export default class Car extends Component {
