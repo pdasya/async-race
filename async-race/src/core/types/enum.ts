@@ -1,3 +1,5 @@
+/* eslint-disable no-shadow */
+/* eslint-disable no-unused-vars */
 const enum PageIds {
     Garage = 'garage',
     Winners = 'winners',
@@ -12,6 +14,7 @@ const enum Links {
 const enum Endpoints {
     garage = 'garage',
     winners = 'winners',
+    engine = 'engine',
 }
 
 const enum Methods {
@@ -19,5 +22,17 @@ const enum Methods {
     POST = 'POST',
     PUT = 'PUT',
     DELETE = 'DELETE',
+    PATCH = 'PATCH',
 }
-export { PageIds, Links, Endpoints, Methods };
+
+const enum Engine {
+    start = 'started',
+    stop = 'stopped',
+    drive = 'drive',
+}
+
+const enum Defaults {
+    carCount = '4',
+    defaultPage = '1',
+}
+export { PageIds, Links, Endpoints, Methods, Engine, Defaults };

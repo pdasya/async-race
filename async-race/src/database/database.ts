@@ -3,7 +3,7 @@ import TGetCars from '@core/types/types';
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import { Endpoints, Methods } from '@core/types/enum';
 
-const BASE = 'http://localhost:3000';
+const BASE = 'http://127.0.0.1:3000';
 
 export default class Database {
     getCars = async (endpoint: string, page: number | string, limit: number | string = 7): Promise<TGetCars> => {
@@ -49,5 +49,19 @@ export default class Database {
         await fetch(`${BASE}/${Endpoints.garage}/${id}`, {
             method: Methods.DELETE,
         });
+    };
+
+    startEngine = async (id: string, status: string) => {
+        const response = await fetch(`${BASE}/${Endpoints.engine}?id=${id}&status=${status}`, {
+            method: Methods.PATCH,
+        });
+        return response.json();
+    };
+
+    switchCarEngine = async (id: string, status: string): Promise<Response> => {
+        const response = await fetch(`${BASE}/${Endpoints.engine}?id=${id}&status=${status}`, {
+            method: Methods.PATCH,
+        });
+        return response;
     };
 }
