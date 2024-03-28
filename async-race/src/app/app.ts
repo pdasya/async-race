@@ -64,6 +64,7 @@ export default class App {
     runApp(): void {
         this.generatePage();
         this.enableRouteChange();
+        window.location.hash = PageIds.Garage;
         App.createNewPage(PageIds.Garage);
     }
 }

@@ -2,7 +2,12 @@
 import EventObserver from '@core/eventObservers/eventObserver';
 import type { ICar } from '@core/types/interfaces';
 
-type TStore = ICar | HTMLDivElement | HTMLInputElement | HTMLButtonElement;
+interface IStateCar {
+    id: number;
+    end?: boolean | undefined;
+}
+
+type TStore = ICar | HTMLDivElement | HTMLInputElement | HTMLImageElement | HTMLElement | IStateCar;
 export default class Store {
     static event: Map<string, EventObserver<unknown>> = new Map();
 

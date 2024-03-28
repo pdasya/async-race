@@ -17,14 +17,17 @@ class Garage extends Component {
 
     total: string;
 
-    db: Database;
+    database: Database;
+
+    isPushRace: boolean;
 
     constructor(tagName: string, className: string, data: TGetCars) {
         super(tagName, className);
         this.data = data;
         this.total = this.data.total || Defaults.carCount;
         this.event = new EventObserver();
-        this.db = new Database();
+        this.database = new Database();
+        this.isPushRace = false;
     }
 
     async getGeneratorCars(): Promise<HTMLElement> {
@@ -35,7 +38,7 @@ class Garage extends Component {
     generateTitle(total: string): HTMLHeadingElement {
         const title = document.createElement('h1');
         title.classList.add('garage__title');
-        const allCars = total || this.data.total;
+        const allCars = total || this.total;
         title.innerHTML = `Garage (${allCars})`;
         return title;
     }
@@ -77,7 +80,7 @@ class Garage extends Component {
 
     async generatePaginationUl(paginationUl: HTMLUListElement): Promise<HTMLUListElement> {
         const currentPage = sessionStorage.getItem('currentPage') ?? Defaults.defaultPage;
-        const data = await this.db.getCars(Endpoints.garage, currentPage);
+        const data = await this.database.getCars(Endpoints.garage, currentPage);
 
         const pages = Math.ceil(Number(data.total) / 7);
         const pagesArray: (string | number)[] = PaginationGenerator.getRange(currentPage, pages);
@@ -124,7 +127,7 @@ class Garage extends Component {
         Store.addToEvent('event', this.event);
         this.event.subscribe(async (event) => {
             const currentPage = sessionStorage.getItem('currentPage') ?? Defaults.defaultPage;
-            const dataCars = await this.db.getCars('garage', currentPage);
+            const dataCars = await this.database.getCars('garage', currentPage);
             const currentId = Store.getCurrentId();
             switch (event) {
                 case 'update':
@@ -142,14 +145,15 @@ class Garage extends Component {
                     this.toggleUpdateButton('enable');
                     break;
                 case 'race':
-                    this.toggleUpdateButton('disable');
+                    this.isPushRace = true;
                     await this.raceAllCar(dataCars.items);
                     break;
                 case 'reset':
-                    this.resetAllCars(dataCars.items);
+                    this.isPushRace = false;
+                    await this.resetAllCars(dataCars.items);
                     break;
                 case 'start':
-                    await this.startDrive(currentId, await this.db.startEngine(currentId, Engine.start));
+                    await this.startDrive(currentId, await this.database.startEngine(currentId, Engine.start));
                     break;
                 case 'stop':
                     await this.resetCarOnStartPosition(Number(this.getElement(`carState${currentId}`).id), currentId);
@@ -157,6 +161,40 @@ class Garage extends Component {
                 default:
             }
         });
+    }
+
+    toggleUpdateButton(variant: string) {
+        const update = Store.getFromStore('updateInterface');
+        if (!update || !(update instanceof HTMLElement)) throw new Error('Update input is not HTMLElement');
+        if (variant === 'enable') {
+            update.classList.remove('car-generator__wrapper--disabled');
+        }
+        if (variant === 'disable') {
+            update.classList.add('car-generator__wrapper--disabled');
+            this.clearInputsInUpdate();
+        }
+    }
+
+    togglePaginationButtons(variant: string) {
+        const pagination = Store.getFromStore('pagination');
+        if (!pagination || !(pagination instanceof HTMLElement)) throw new Error('Pagination is not HTMLElement');
+        if (variant === 'enable') {
+            pagination.classList.remove('pagination--disabled');
+        }
+        if (variant === 'disable') {
+            pagination.classList.add('pagination--disabled');
+        }
+    }
+
+    toggleAllButtons(variant: string, id: string) {
+        if (variant === 'enable') {
+            this.toggleEngineButton(id, 'stop');
+            this.togglePaginationButtons('enable');
+        } else {
+            this.toggleEngineButton(id, 'start');
+            this.toggleUpdateButton('disable');
+            this.togglePaginationButtons('disable');
+        }
     }
 
     toggleEngineButton(id: string, variant: string): void {
@@ -176,11 +214,11 @@ class Garage extends Component {
 
     async raceAllCar(cars: ICar[]) {
         let isNotFinished = true;
-        Promise.all(
+        await Promise.all(
             cars.map(async (car) => {
                 if (car.id === undefined) throw new Error('Car id is not defined');
                 this.toggleEngineButton(car.id, 'start');
-                const carState = await this.db.startEngine(car.id, Engine.start);
+                const carState = await this.database.startEngine(car.id, Engine.start);
                 const state = await this.startDrive(car.id, carState);
 
                 if (state?.finish && isNotFinished) {
@@ -190,6 +228,9 @@ class Garage extends Component {
                 return false;
             })
         );
+
+        this.isPushRace = false;
+        this.togglePaginationButtons('enable');
     }
 
     resetAllCars(cars: ICar[]): Promise<PromiseSettledResult<void>[]> {
@@ -206,7 +247,7 @@ class Garage extends Component {
     generateModal(carName: string, time: number): void {
         const modal = document.createElement('div');
         modal.classList.add('modal');
-        const timeSecond = Number(time.toFixed()) / 1000;
+        const timeSecond = Number((time / 1000).toFixed(2));
         const textContent = `${carName} winning, with ${timeSecond} seconds`;
         modal.textContent = textContent;
         document.body.append(modal);
@@ -220,7 +261,8 @@ class Garage extends Component {
         if (!(carModel instanceof HTMLElement)) throw new Error('CarModel is not HTMLDivElement');
         carModel.style.transform = 'translate(0px)';
         cancelAnimationFrame(requestId);
-        await this.db.startEngine(id, Engine.stop);
+        await this.database.startEngine(id, Engine.stop);
+        this.toggleAllButtons('enable', id);
     }
 
     getElement(key: string) {
@@ -229,7 +271,8 @@ class Garage extends Component {
         return value;
     }
 
-    async startDrive(id: string, carState: { velocity: number; distance: number }): Promise<IStateCar | null> {
+    async startDrive(id: string, carState: { velocity: number; distance: number }): Promise<IStateCar> {
+        this.toggleAllButtons('disable', id);
         const { velocity, distance } = carState;
         const carModel = this.getElement(`carModel${id}`);
         const carFinishLine = this.getElement(`carFinishLine${id}`);
@@ -239,13 +282,16 @@ class Garage extends Component {
         const distanceWindow = this.getDistanceBetweenElements(carModel, carFinishLine);
         const res = this.animationCar(carModel, distanceWindow, time);
         Store.addToStore(`carState${id}`, res);
-        await this.db.switchCarEngine(id, Engine.drive).then((response) => {
+        await this.database.switchCarEngine(id, Engine.drive).then((response) => {
             if (response.status !== 200) {
                 cancelAnimationFrame(res.id);
             }
             return response;
         });
-        return res.finish ? res : null;
+        if (!this.isPushRace) {
+            this.togglePaginationButtons('enable');
+        }
+        return res;
     }
 
     getDistanceBetweenElements = (element1: HTMLElement, element2: HTMLElement): number => {
@@ -335,18 +381,6 @@ class Garage extends Component {
             generatorCar,
             containerCar,
         };
-    }
-
-    toggleUpdateButton(variant: string) {
-        const update = Store.getFromStore('updateInterface');
-        if (!update || !(update instanceof HTMLElement)) throw new Error('Update input is not HTMLElement');
-        if (variant === 'enable') {
-            update.classList.remove('car-generator__wrapper--disabled');
-        }
-        if (variant === 'disable') {
-            update.classList.add('car-generator__wrapper--disabled');
-            this.clearInputsInUpdate();
-        }
     }
 
     clearInputsInUpdate() {
