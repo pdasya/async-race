@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import Component from '@core/templates/component';
-import DataBase from '@database/database';
+import Database from '@database/database';
 import Store from '@core/store/store';
 import { Endpoints } from '@core/types/enum';
 import { ICar } from '@core/types/interfaces';
@@ -39,7 +39,7 @@ export default class GeneratorCar extends Component {
 
     async getCreateInterface(): Promise<HTMLElement> {
         const create = this.generateGeneratorCars('create');
-        const database = new DataBase();
+        const database = new Database();
 
         const event = Store.event.get('event');
         if (event === undefined) throw new Error('Event is undefined');
@@ -53,7 +53,7 @@ export default class GeneratorCar extends Component {
 
     async getUpdateInterface(): Promise<HTMLElement> {
         const update = this.generateGeneratorCars('update');
-        const database = new DataBase();
+        const database = new Database();
 
         const event = Store.event.get('event');
         if (event === undefined) throw new Error('Event is undefined');
@@ -99,7 +99,7 @@ export default class GeneratorCar extends Component {
     }
 
     async generateRandomCars(button: HTMLButtonElement): Promise<void> {
-        const db = new DataBase();
+        const db = new Database();
         const event = Store.event.get('event');
         if (!event) throw new Error('Event is undefined');
         const oneHundredCars: ICar[] = new CarRandomGenerate().generateOneHundredCars();

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export interface ICar {
     name: string;
     id?: string;
@@ -9,4 +10,10 @@ export interface ICarRandomGenerate {
     generateRandomColor: () => string;
     generateCar: () => ICar;
     generateOneHundredCars: () => ICar[];
+}
+
+export interface IPaginationGenerator {
+    getRange(start: number, end: number): number[];
+    clamp(number: number, lower: number, upper: number): number;
+    generate(): Array<string | number>;
 }

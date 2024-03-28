@@ -4,7 +4,7 @@ import finish from '@assets/images/finish-flag.svg';
 import EventObserver from '@core/eventObservers/eventObserver';
 import Database from '@database/database';
 import Store from '@core/store/store';
-import { ICar } from '@core/types/interfaces';
+// import { ICar } from '@core/types/interfaces';
 
 export default class Car extends Component {
     event: EventObserver<unknown>;
@@ -48,12 +48,12 @@ export default class Car extends Component {
             event.notify('updateCars');
         }
 
-        if (option === 'select') {
-            const car: ICar = await database.getCars(id);
-            if (!car) throw new Error('Car is undefined');
-            Store.addToStore('car', car);
-            event.notify('updateInput');
-        }
+        // if (option === 'select') {
+        //     const car: ICar = await database.getCars(id);
+        //     if (!car) throw new Error('Car is undefined');
+        //     Store.addToStore('car', car);
+        //     event.notify('updateInput');
+        // }
     }
 
     enableListenersOnButton(button: HTMLButtonElement, id: string, option: string): void {

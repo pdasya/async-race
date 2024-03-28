@@ -9,7 +9,7 @@ import Main from '@core/layouts/main';
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import Footer from '@core/layouts/footer';
 // eslint-disable-next-line import/no-unresolved, import/extensions
-import Garage from '@pages/garagePage';
+import GaragePage from '@pages/garagePage';
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import Winners from '@pages/winnersPage';
 
@@ -29,7 +29,7 @@ export default class App {
         let page: Page | null = null;
 
         if (idPage === PageIds.Garage) {
-            page = new Garage(idPage);
+            page = new GaragePage(idPage);
             App.url = idPage;
         } else if (idPage === PageIds.Winners) {
             page = new Winners(idPage);
