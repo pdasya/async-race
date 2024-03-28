@@ -6,12 +6,17 @@ import { Endpoints, Methods } from '@core/types/enum';
 const BASE = 'http://localhost:3000';
 
 export default class Database {
-    getCars = async (endpoint: string, page: number, limit: number = 7): Promise<TGetCars> => {
+    getCars = async (endpoint: string, page: number | string, limit: number | string = 7): Promise<TGetCars> => {
         const response = await fetch(`${BASE}/${endpoint}?_page=${page}&_limit=${limit}`);
         return {
             items: await response.json(),
             total: response.headers.get('X-Total-Count'),
         };
+    };
+
+    getCar = async (id: string) => {
+        const response = await fetch(`${BASE}/${Endpoints.garage}/${id}`);
+        return response.json();
     };
 
     createCar = async (name: string, color: string): Promise<void> => {
