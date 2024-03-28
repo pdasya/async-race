@@ -17,3 +17,10 @@ export interface IPaginationGenerator {
     clamp(number: number, lower: number, upper: number): number;
     generate(): Array<string | number>;
 }
+
+export interface IStateCar {
+    id: number;
+    finish?: boolean | undefined;
+    distance?: number | undefined;
+    time: number;
+}

@@ -10,6 +10,16 @@ export default class Store {
 
     static currentPage: number = 1;
 
+    static currentId: string = '1';
+
+    static getCurrentId(): string {
+        return Store.currentId;
+    }
+
+    static setCurrentId(id: string): void {
+        Store.currentId = id;
+    }
+
     static getCurrentPage(): number {
         return Store.currentPage;
     }
@@ -28,6 +38,10 @@ export default class Store {
 
     static getFromStore(key: string): TStore | undefined {
         return Store.store.get(key);
+    }
+
+    static getFromEvent(key: string): EventObserver<unknown> | undefined {
+        return Store.event.get(key);
     }
 
     static getEvent(): Map<string, EventObserver<unknown>> {
