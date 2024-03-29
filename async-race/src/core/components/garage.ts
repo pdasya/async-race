@@ -1,4 +1,4 @@
-import { Endpoints, Defaults, Engine, Pagination, Event } from '@core/types/enum';
+import { Endpoints, Defaults, Engine, Pagination, Event, Code } from '@core/types/enum';
 import { ICar, IStateCar } from '@core/types/interfaces';
 import Component from '@core/templates/component';
 import Car from '@core/components/car';
@@ -118,7 +118,7 @@ class Garage extends Component {
         }
     };
 
-    eventListener(): void {
+    eventListener(currentPage: string): void {
         Store.addToEvent('event', this.event);
         this.event.subscribe(async (event) => {
             const currentPage = sessionStorage.getItem('currentPage') ?? Defaults.defaultPage;
@@ -149,9 +149,11 @@ class Garage extends Component {
                     await this.resetAllCars(dataCars.items);
                     break;
                 case 'start':
+                    this.toggleRaceResetButtons('all');
                     await this.startDrive(currentId, await this.database.startEngine(currentId, Engine.start));
                     break;
                 case 'stop':
+                    this.toggleRaceResetButtons('enable');
                     await this.resetCarOnStartPosition(Number(this.getElement(`carState${currentId}`).id), currentId);
                     break;
                 default:
@@ -162,8 +164,15 @@ class Garage extends Component {
     toggleUpdateButton(variant: string) {
         const update = Store.getFromStore('updateInterface');
         if (!update || !(update instanceof HTMLElement)) throw new Error('Update input is not HTMLElement');
+        const updateInput = Store.getFromStore('updateTitle');
+        const updateColor = Store.getFromStore('updateColor');
+        if (!(updateColor instanceof HTMLInputElement)) throw new Error('UpdateColor is not HTMLInputElement');
+        if (!(updateInput instanceof HTMLInputElement)) throw new Error('UpdateInput is not HTMLInputElement');
         if (variant === 'enable') {
             update.classList.remove('car-generator__wrapper--disabled');
+            if (updateInput.value === '' && updateColor.value === '#000000') {
+                update.classList.add('car-generator__wrapper--disabled');
+            }
         }
         if (variant === 'disable') {
             update.classList.add('car-generator__wrapper--disabled');
@@ -229,6 +238,7 @@ class Garage extends Component {
 
     async raceAllCar(cars: ICar[]) {
         let isNotFinished = true;
+        this.toggleRaceResetButtons('all');
         await Promise.all(
             cars.map(async (car) => {
                 if (car.id === undefined) throw new Error('Car id is not defined');
@@ -340,7 +350,7 @@ class Garage extends Component {
         const res = this.animationCar(carModel, distanceWindow, time);
         Store.addToStore(`carState${id}`, res);
         await this.database.switchCarEngine(id, Engine.drive).then((response) => {
-            if (response.status !== 200) {
+            if (response.status !== Code.Success) {
                 cancelAnimationFrame(res.id);
             }
             return response;
@@ -418,7 +428,7 @@ class Garage extends Component {
         if (!updateColor || !(updateColor instanceof HTMLInputElement))
           throw new Error('UpdateColor is not HTMLDivElement');
     
-        const currentPage = sessionStorage.getItem(`${Pagination.garage}currentPage`) ?? Defaults.defaultPage;
+        const currentPage = sessionStorage.getItem(`currentPage`) ?? Defaults.defaultPage;
         const cars = await this.database.getCars(Endpoints.garage, currentPage);
         cars.items.forEach((car) => {
           if (car.id === id) {
@@ -426,8 +436,8 @@ class Garage extends Component {
             const valueColor = car.color ?? '#000000';
             updateColor.value = valueColor;
             updateTitle.value = valueTitle;
-            sessionStorage.setItem(`${Pagination.garage}updateTitle`, updateTitle.value);
-            sessionStorage.setItem(`${Pagination.garage}updateColor`, updateColor.value);
+            sessionStorage.setItem(`updateTitle`, updateTitle.value);
+            sessionStorage.setItem(`updateColor`, updateColor.value);
     
             Store.addToStore('car', car);
           }
@@ -480,7 +490,8 @@ class Garage extends Component {
     }
 
     async renderGarage(): Promise<HTMLElement> {
-        this.eventListener();
+        const currentPage = sessionStorage.getItem(`currentPage`) ?? Defaults.defaultPage;
+        this.eventListener(currentPage);
         const data = await this.appendAll(this.data, this.total);
         const { containerCar, generatorCar } = data;
         Store.addToStore('containerCar', containerCar);

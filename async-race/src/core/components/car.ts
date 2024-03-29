@@ -52,6 +52,7 @@ export default class Car extends Component {
 
         switch (option) {
             case Event.delete:
+                this.clearInputsInUpdate();
                 await this.database.deleteCar(id);
                 event.notify(Event.update);
                 break;
@@ -73,6 +74,18 @@ export default class Car extends Component {
             default:
         }
     }
+
+    clearInputsInUpdate() {
+        const title = Store.getFromStore('updateTitle');
+        const color = Store.getFromStore('updateColor');
+        sessionStorage.removeItem('updateTitle');
+        sessionStorage.removeItem('updateColor');
+        if (!title || !(title instanceof HTMLInputElement)) throw new Error('Title input is not HTMLInputElement');
+        if (!color || !(color instanceof HTMLInputElement)) throw new Error('Color input is not HTMLInputElement');
+    
+        title.value = '';
+        color.value = '#000000';
+      }
 
     enableListenersOnButton(button: HTMLButtonElement, id: string, option: string): void {
         button.addEventListener('click', async () => {

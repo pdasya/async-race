@@ -58,4 +58,12 @@ const enum Pagination {
     garage = 'paginationGarage',
     winners = 'paginationWinners',
 }
-export { PageIds, Links, Endpoints, Methods, Engine, Defaults, Sort, Event, Pagination };
+
+const enum Code {
+    Success = 200,
+    BadRequest = 400,
+    NotFound = 404,
+    TooManyRequest = 429, 
+    InternalServerError = 500,
+}
+export { PageIds, Links, Endpoints, Methods, Engine, Defaults, Sort, Event, Pagination, Code };

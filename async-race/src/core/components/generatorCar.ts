@@ -80,13 +80,13 @@ export default class GeneratorCar extends Component {
         });
 
         update.inputForTitle.addEventListener('input', () => {
-            sessionStorage.setItem(`${Pagination.garage}updateTitle`, update.inputForTitle.value);
+            sessionStorage.setItem(`updateTitle`, update.inputForTitle.value);
           });
           update.inputForColor.addEventListener('input', () => {
-            sessionStorage.setItem(`${Pagination.garage}updateColor`, update.inputForColor.value);
+            sessionStorage.setItem(`updateColor`, update.inputForColor.value);
           });
-          update.inputForTitle.value = sessionStorage.getItem(`${Pagination.garage}updateTitle`) ?? '';
-          update.inputForColor.value = sessionStorage.getItem(`${Pagination.garage}updateColor`) ?? '';
+          update.inputForTitle.value = sessionStorage.getItem(`updateTitle`) ?? '';
+          update.inputForColor.value = sessionStorage.getItem(`updateColor`) ?? '';
 
         return update.divInput;
     }
