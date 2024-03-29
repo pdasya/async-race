@@ -395,6 +395,72 @@ html, body {
     align-items: center;
   }
 
+  .winners__cars-container {
+    background-color: var(--darkgray);
+    width: 100%;
+    height: fit-content;
+    padding-bottom: 50px;
+  }
+
+  .winners__navigation {
+    background-color: var(--gray);
+    width: 100%;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .winners__navigation-item {
+    display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100px;
+      height: 100%;
+      color: var(--black);
+      text-decoration: none;
+      cursor: pointer;
+  }
+
+  .winners__navigation-item:hover {
+    color: var(--white);
+  }
+
+  .winners__navigation-item svg {
+    width: 70px;
+    height: 40px;
+  }
+
+  .winners__car {
+    background-color: var(--darkgray);
+    width: 100%;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    border: 1px solid var(--black);
+    margin: 5px 0;
+  }
+
+  .winners__car-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100%;
+    color:var(--black);
+    text-decoration: none;
+  }
+
+  .winners__car-item svg {
+    width: 70px;
+    height: 40px;
+  }
+
 
 
 

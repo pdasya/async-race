@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export default class EventObserver<Listener> {
     observers: Array<(T: Listener) => void>;
 

@@ -1,14 +1,12 @@
-// eslint-disable-next-line import/no-unresolved, import/extensions
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/extensions */
 import Page from '@core/templates/page';
+import Winners from '@/core/components/winners';
 
-export default class Winners extends Page {
-    static TextObject: {
-        Title: 'Winners Page';
-    };
-
+export default class WinnersPage extends Page {
     async getWinnersPageContainer(): Promise<HTMLElement> {
-        const title = this.createHeaderTitle(Winners.TextObject.Title);
-        this.container.append(title);
+        const winners = new Winners('div', 'winners');
+        this.container.append(await winners.renderWinners());
         return this.container;
     }
 }
