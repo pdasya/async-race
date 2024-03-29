@@ -1,4 +1,4 @@
-import { Endpoints, Defaults, Engine } from '@core/types/enum';
+import { Endpoints, Defaults, Engine, Pagination, Event } from '@core/types/enum';
 import { ICar, IStateCar } from '@core/types/interfaces';
 import Component from '@core/templates/component';
 import Car from '@core/components/car';
@@ -11,14 +11,10 @@ import PaginationGenerator from '@supporters/pagination/pagination';
 
 class Garage extends Component {
     data: TGetCars;
-
     event: EventObserver<unknown>;
-
     total: string;
-
     database: Database;
-
-    isPushRace: boolean;
+    isClickedRace: boolean;
 
     constructor(tagName: string, className: string, data: TGetCars) {
         super(tagName, className);
@@ -26,7 +22,7 @@ class Garage extends Component {
         this.total = this.data.total || Defaults.carCount;
         this.event = new EventObserver();
         this.database = new Database();
-        this.isPushRace = false;
+        this.isClickedRace = false;
     }
 
     async getGeneratorCars(): Promise<HTMLElement> {
@@ -144,11 +140,12 @@ class Garage extends Component {
                     this.toggleUpdateButton('enable');
                     break;
                 case 'race':
-                    this.isPushRace = true;
+                    this.isClickedRace = true;
+                    this.toggleRaceResetButtons('all');
                     await this.raceAllCar(dataCars.items);
                     break;
                 case 'reset':
-                    this.isPushRace = false;
+                    this.isClickedRace = false;
                     await this.resetAllCars(dataCars.items);
                     break;
                 case 'start':
@@ -187,36 +184,55 @@ class Garage extends Component {
 
     toggleAllButtons(variant: string, id: string) {
         if (variant === 'enable') {
-            this.toggleEngineButton(id, 'stop');
+            this.toggleCarButtons(id, 'stop');
             this.togglePaginationButtons('enable');
         } else {
-            this.toggleEngineButton(id, 'start');
+            this.toggleCarButtons(id, 'start');
             this.toggleUpdateButton('disable');
             this.togglePaginationButtons('disable');
         }
     }
 
-    toggleEngineButton(id: string, variant: string): void {
+    toggleCarButtons(id: string, variant: string): void {
+        const select = this.getElement(`carSelect${id}`);
+        const remove = this.getElement(`carRemove${id}`);
         const carStopButton = this.getElement(`carStop${id}`);
         const carStartButton = this.getElement(`carStart${id}`);
         if (!(carStopButton instanceof HTMLButtonElement)) throw new Error('CarStopButton is not HTMLButtonElement');
         if (!(carStartButton instanceof HTMLButtonElement)) throw new Error('CarStartButton is not HTMLButtonElement');
-
+        if (!(select instanceof HTMLButtonElement)) throw new Error('SelectButton is not HTMLButtonElement');
+        if (!(remove instanceof HTMLButtonElement)) throw new Error('RemoveButton is not HTMLButtonElement');
+    
         if (variant === 'start') {
-            carStopButton.classList.remove('car__button--disabled');
-            carStartButton.classList.add('car__button--disabled');
+          carStopButton.classList.remove('car__button--disabled');
+          carStartButton.classList.add('car__button--disabled');
+          select.classList.add('car__button--disabled');
+          remove.classList.add('car__button--disabled');
         } else {
-            carStopButton.classList.add('car__button--disabled');
-            carStartButton.classList.remove('car__button--disabled');
+          carStopButton.classList.add('car__button--disabled');
+          carStartButton.classList.remove('car__button--disabled');
+          select.classList.remove('car__button--disabled');
+          remove.classList.remove('car__button--disabled');
         }
-    }
+      }
+
+      toggleCreateButton(variant: string) {
+        const create = Store.getFromStore('createInterface');
+        if (!create || !(create instanceof HTMLElement)) throw new Error('Create input is not HTMLElement');
+        if (variant === 'enable') {
+          create.classList.remove('car-generator__wrapper--disabled');
+        }
+        if (variant === 'disable') {
+          create.classList.add('car-generator__wrapper--disabled');
+        }
+      }
 
     async raceAllCar(cars: ICar[]) {
         let isNotFinished = true;
         await Promise.all(
             cars.map(async (car) => {
                 if (car.id === undefined) throw new Error('Car id is not defined');
-                this.toggleEngineButton(car.id, 'start');
+                this.toggleCarButtons(car.id, 'start');
                 const carState = await this.database.startEngine(car.id, Engine.start);
                 const state = await this.startDrive(car.id, carState);
 
@@ -239,20 +255,49 @@ class Garage extends Component {
             })
         );
 
-        this.isPushRace = false;
+        this.isClickedRace = false;
         this.togglePaginationButtons('enable');
     }
 
-    resetAllCars(cars: ICar[]): Promise<PromiseSettledResult<void>[]> {
-        return Promise.allSettled(
-            cars.map(async (car) => {
-                if (car.id === undefined) throw new Error('Car id is not defined');
-                const requestId = this.getElement(`carState${car.id}`);
-                await this.resetCarOnStartPosition(Number(requestId.id), car.id);
-                this.toggleEngineButton(car.id, 'stop');
-            })
+    async resetAllCars(cars: ICar[]): Promise<PromiseSettledResult<void>[]> {
+        const res = await Promise.allSettled(
+          cars.map(async (car) => {
+            if (car.id === undefined) throw new Error('Car id is not defined');
+            const requestId = this.getElement(`carState${car.id}`);
+            await this.resetCarOnStartPosition(Number(requestId.id), car.id);
+          })
         );
-    }
+        this.toggleRaceResetButtons('enable');
+        return res;
+      }
+
+      toggleRaceResetButtons(variant: string) {
+        const race = Store.getFromStore('race');
+        const reset = Store.getFromStore('reset');
+        const generateCars = Store.getFromStore('generateCars');
+        if (
+          !(race instanceof HTMLButtonElement) ||
+          !(reset instanceof HTMLButtonElement) ||
+          !(generateCars instanceof HTMLButtonElement)
+        ) {
+          throw new Error('Reset or GenerateCars is not HTMLButtonElement');
+        }
+        if (variant === 'disable') {
+          race.classList.add('car-generator__button--disabled');
+          reset.classList.remove('car-generator__button--disabled');
+          generateCars.classList.add('car-generator__button--disabled');
+        }
+        if (variant === 'all') {
+          race.classList.add('car-generator__button--disabled');
+          reset.classList.add('car-generator__button--disabled');
+          generateCars.classList.add('car-generator__button--disabled');
+        }
+        if (variant === 'enable') {
+          race.classList.remove('car-generator__button--disabled');
+          reset.classList.add('car-generator__button--disabled');
+          generateCars.classList.remove('car-generator__button--disabled');
+        }
+      }
 
     generateModal(carName: string, time: number): void {
         const modal = document.createElement('div');
@@ -273,6 +318,7 @@ class Garage extends Component {
         cancelAnimationFrame(requestId);
         await this.database.startEngine(id, Engine.stop);
         this.toggleAllButtons('enable', id);
+        this.toggleRaceResetButtons('enable');
     }
 
     getElement(key: string) {
@@ -283,6 +329,7 @@ class Garage extends Component {
 
     async startDrive(id: string, carState: { velocity: number; distance: number }): Promise<IStateCar> {
         this.toggleAllButtons('disable', id);
+        this.toggleRaceResetButtons('all');
         const { velocity, distance } = carState;
         const carModel = this.getElement(`carModel${id}`);
         const carFinishLine = this.getElement(`carFinishLine${id}`);
@@ -298,9 +345,10 @@ class Garage extends Component {
             }
             return response;
         });
-        if (!this.isPushRace) {
+        if (!this.isClickedRace) {
             this.togglePaginationButtons('enable');
         }
+        this.toggleRaceResetButtons('disable');
         return res;
     }
 
@@ -357,7 +405,34 @@ class Garage extends Component {
         }
         generatorCar.innerHTML = '';
         generatorCar.append(await this.getGeneratorCars());
+        await this.updateInputs();
     }
+
+    async updateInputs() {
+        const carBefore = Store.getFromStore('car');
+        const id = carBefore?.id || Defaults.defaultPage;
+        const updateTitle = Store.getFromStore('updateTitle');
+        const updateColor = Store.getFromStore('updateColor');
+        if (!updateTitle || !(updateTitle instanceof HTMLInputElement))
+          throw new Error('UpdateTitle is not HTMLDivElement');
+        if (!updateColor || !(updateColor instanceof HTMLInputElement))
+          throw new Error('UpdateColor is not HTMLDivElement');
+    
+        const currentPage = sessionStorage.getItem(`${Pagination.garage}currentPage`) ?? Defaults.defaultPage;
+        const cars = await this.database.getCars(Endpoints.garage, currentPage);
+        cars.items.forEach((car) => {
+          if (car.id === id) {
+            const valueTitle = car.name ?? '';
+            const valueColor = car.color ?? '#000000';
+            updateColor.value = valueColor;
+            updateTitle.value = valueTitle;
+            sessionStorage.setItem(`${Pagination.garage}updateTitle`, updateTitle.value);
+            sessionStorage.setItem(`${Pagination.garage}updateColor`, updateColor.value);
+    
+            Store.addToStore('car', car);
+          }
+        });
+      }
 
     async rerenderPagination(): Promise<void> {
         const pagination = Store.getFromStore('pagination');

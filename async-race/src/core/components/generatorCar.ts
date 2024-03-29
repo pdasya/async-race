@@ -39,6 +39,18 @@ export default class GeneratorCar extends Component {
         const create = this.generateGeneratorCars('create');
         const database = new Database();
 
+        Store.addToStore('createInterface', create.divInput);
+        Store.addToStore('createTitle', create.inputForTitle);
+        Store.addToStore('createColor', create.inputForColor);
+        create.inputForTitle.addEventListener('input', () => {
+        sessionStorage.setItem(`${Pagination.garage}createTitle`, create.inputForTitle.value);
+        });
+        create.inputForColor.addEventListener('input', () => {
+        sessionStorage.setItem(`${Pagination.garage}createColor`, create.inputForColor.value);
+        });
+        create.inputForTitle.value = sessionStorage.getItem(`${Pagination.garage}createTitle`) ?? '';
+        create.inputForColor.value = sessionStorage.getItem(`${Pagination.garage}createColor`) ?? '';
+
         const event = Store.getFromEvent('event');
         if (event === undefined) throw new Error('Event is undefined');
 
@@ -67,17 +79,14 @@ export default class GeneratorCar extends Component {
             event.notify(Event.update);
         });
 
-        const currentPage = sessionStorage.getItem(`${Pagination.garage}currentPage`) ?? Defaults.defaultPage;
-        const cars = await database.getCars(Endpoints.garage, currentPage);
-
-        cars.items.forEach((car) => {
-            if (car.id === id) {
-                update.inputForTitle.value = car?.name || '';
-                update.inputForColor.value = car?.color || '#000000';
-
-                Store.addToStore('car', car);
-            }
-        });
+        update.inputForTitle.addEventListener('input', () => {
+            sessionStorage.setItem(`${Pagination.garage}updateTitle`, update.inputForTitle.value);
+          });
+          update.inputForColor.addEventListener('input', () => {
+            sessionStorage.setItem(`${Pagination.garage}updateColor`, update.inputForColor.value);
+          });
+          update.inputForTitle.value = sessionStorage.getItem(`${Pagination.garage}updateTitle`) ?? '';
+          update.inputForColor.value = sessionStorage.getItem(`${Pagination.garage}updateColor`) ?? '';
 
         return update.divInput;
     }
@@ -92,9 +101,13 @@ export default class GeneratorCar extends Component {
     async generateButtons(): Promise<HTMLElement> {
         const wrapper = document.createElement('div');
         wrapper.classList.add('car-generator__buttons');
-        const race = await this.generateButton('race');
-        const reset = await this.generateButton('reset');
+        const race = await this.enableListenerAndGenerateButton('race');
+        const reset = await this.enableListenerAndGenerateButton('reset');
+        reset.classList.add('car-generator__button--disabled');
         const generateCars = this.generateButton('generate cars');
+        Store.addToStore('race', race);
+        Store.addToStore('reset', reset);
+        Store.addToStore('generateCars', await generateCars);
         this.generateRandomCars(await generateCars);
         wrapper.append(race, reset, await generateCars);
         return wrapper;
@@ -117,7 +130,7 @@ export default class GeneratorCar extends Component {
         });
     }
 
-    async enableListenerButton(name: string) {
+    async enableListenerAndGenerateButton(name: string) {
         const element = this.generateButton(name);
 
         (await element).addEventListener('click', async () => {
