@@ -1,17 +1,10 @@
-// eslint-disable-next-line import/no-unresolved, import/extensions
 import Page from '@core/templates/page';
-// eslint-disable-next-line import/no-unresolved, import/extensions
 import { PageIds } from '@core/types/enum';
-// eslint-disable-next-line import/no-unresolved, import/extensions
 import Header from '@core/layouts/header';
-// eslint-disable-next-line import/no-unresolved, import/extensions
 import Main from '@core/layouts/main';
-// eslint-disable-next-line import/no-unresolved, import/extensions
 import Footer from '@core/layouts/footer';
-// eslint-disable-next-line import/no-unresolved, import/extensions
 import GaragePage from '@pages/garagePage';
-// eslint-disable-next-line import/no-unresolved, import/extensions
-import Winners from '@pages/winnersPage';
+import WinnersPage from '@pages/winnersPage';
 
 export default class App {
     private static body: HTMLElement = document.body;
@@ -32,7 +25,7 @@ export default class App {
             page = new GaragePage(idPage);
             App.url = idPage;
         } else if (idPage === PageIds.Winners) {
-            page = new Winners(idPage);
+            page = new WinnersPage(idPage);
             App.url = idPage;
         }
 

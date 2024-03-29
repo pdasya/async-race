@@ -1,36 +1,41 @@
 {
-    "plugins": ["prettier", "import", "@typescript-eslint"],
-    "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "airbnb-base",
-        "plugin:prettier/recommended"
-    ],
-    "parserOptions": {
-        "ecmaVersion": 2020,
-        "sourceType": "module"
-    },
     "env": {
-        "es6": true,
         "browser": true,
-        "node": true
+        "es2021": true
     },
-    "rules": {
-        "no-debugger": "off",
-        "no-console": 0,
-        "class-methods-use-this": "off",
-        "@typescript-eslint/no-explicit-any": 2,
-        "@typescript-eslint/no-var-requires": "off"
-    },
+    "extends": [
+        "airbnb-base",
+        "airbnb-typescript/base",
+        "plugin:prettier/recommended",
+        "eslint:recommended",
+        "prettier",
+        "plugin:@typescript-eslint/recommended"
+    ],
     "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "project": "./tsconfig.json"
+    },
+    "plugins": ["prettier", "import", "@typescript-eslint"],
+    "rules": {
+        "prettier/prettier": "warn",
+        "no-debugger": "off",
+        "no-console": "error",
+        "class-methods-use-this": "off",
+        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/lines-between-class-members": "off",
+        "import/no-dynamic-require": "off"
+    },
     "settings": {
         "import/resolver": {
-          "webpack": {
-            "config": "./webpack.config.js"
-          },
-          "node": {
-            "extensions": [".js", ".jsx", ".ts", ".tsx"]
-          }
+            "webpack": {
+                "config": "./webpack.config.js"
+            },
+            "typescript": {
+                "config": "./tsconfig.json"
+            },
+            "node": {
+                "extensions": [".js", ".jsx", ".ts", ".tsx"]
+            }
         }
-      }
+    }
 }
