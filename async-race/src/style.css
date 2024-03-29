@@ -424,6 +424,20 @@ html, body {
       cursor: pointer;
   }
 
+  .winners__navigation-item-toggle {
+    cursor: pointer;
+  }
+
+  .winners__navigation-item-toggle.asc .winners__navigation-item-up,
+  .winners__navigation-item-toggle.desc .winners__navigation-item-down {
+    color: var(--white);
+  }
+
+  .winners__navigation-item-toggle.asc .winners__navigation-item-down
+  .winners__navigation-item-toggle.desc .winners__navigation-item-up {
+    color: var(--white);
+  }
+
   .winners__navigation-item:hover {
     color: var(--white);
   }

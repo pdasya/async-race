@@ -50,7 +50,7 @@ export default class Database {
         });
     };
 
-    startEngine = async (id: string, status: string) => {
+    startEngine = async (id: string, status: string): Promise<{ velocity: number; distance: number }> => {
         const response = await fetch(`${BASE}/${Endpoints.engine}?id=${id}&status=${status}`, {
             method: Methods.PATCH,
         });
@@ -64,8 +64,15 @@ export default class Database {
         return response;
     };
 
-    getWinners = async (page: number | string, limit: number | string = 10): Promise<TGetCars> => {
-        const response = await fetch(`${BASE}/${Endpoints.winners}?_page=${page}&_limit=${limit}`);
+    getWinners = async (
+        page: number | string,
+        sort: string = '',
+        order: string = '',
+        limit: number | string = 10
+      ): Promise<TGetCars> => {
+        const response = await fetch(
+          `${BASE}/${Endpoints.winners}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`
+        );
         return {
             items: await response.json(),
             total: response.headers.get('X-Total-Count'),
