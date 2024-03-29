@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unresolved
 import EventObserver from '@core/eventObservers/eventObserver';
 import type { ICar } from '@core/types/interfaces';
 

@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unresolved, import/extensions
 import Component from '@core/templates/component';
 
 export default class Main extends Component {

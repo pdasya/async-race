@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import Component from '@core/templates/component';
 import finish from '@assets/images/finish-flag.svg';
 import EventObserver from '@core/eventObservers/eventObserver';
@@ -6,6 +5,7 @@ import Database from '@database/database';
 import Store from '@core/store/store';
 import { ICar } from '@core/types/interfaces';
 import getCarImage from '@supporters/getCarImage/getCarImage';
+import { Event } from '@core/types/enum';
 
 export default class Car extends Component {
     event: EventObserver<unknown>;
@@ -49,23 +49,23 @@ export default class Car extends Component {
         if (!car) throw new Error('Car1 is undefined');
 
         switch (option) {
-            case 'delete':
+            case Event.delete:
                 await this.database.deleteCar(id);
-                event.notify('update');
+                event.notify(Event.update);
                 break;
-            case 'select': {
+            case Event.select: {
                 Store.addToStore('car', car);
-                event.notify('updateInput');
+                event.notify(Event.select);
                 break;
             }
-            case 'start': {
+            case Event.start: {
                 Store.setCurrentId(id);
                 Store.addToStore('car', car);
-                event.notify('start');
+                event.notify(Event.start);
                 break;
             }
-            case 'stop': {
-                event.notify('stop');
+            case Event.stop: {
+                event.notify(Event.stop);
                 break;
             }
             default:

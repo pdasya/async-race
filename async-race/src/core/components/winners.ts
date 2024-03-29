@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import { ICar } from '@core/types/interfaces';
 import Database from '@database/database';
 import Component from '@core/templates/component';

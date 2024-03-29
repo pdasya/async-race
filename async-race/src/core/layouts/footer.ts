@@ -1,6 +1,4 @@
-// eslint-disable-next-line import/no-unresolved, import/extensions
 import Component from '@core/templates/component';
-// eslint-disable-next-line import/no-unresolved, import/extensions
 import { Links } from '@core/types/enum';
 
 const links = [

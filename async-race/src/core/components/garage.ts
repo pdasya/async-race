@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import { Endpoints, Defaults, Engine } from '@core/types/enum';
 import { ICar, IStateCar } from '@core/types/interfaces';
 import Component from '@core/templates/component';

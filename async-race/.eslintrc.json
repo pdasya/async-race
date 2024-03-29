@@ -13,7 +13,7 @@
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "project": "./tsconfig.json"
+        "project": "**/tsconfig.json"
     },
     "plugins": ["prettier", "import", "@typescript-eslint"],
     "rules": {
@@ -24,18 +24,18 @@
         "@typescript-eslint/no-explicit-any": "error",
         "@typescript-eslint/lines-between-class-members": "off",
         "import/no-dynamic-require": "off"
-    },
-    "settings": {
-        "import/resolver": {
-            "webpack": {
-                "config": "./webpack.config.js"
-            },
-            "typescript": {
-                "config": "./tsconfig.json"
-            },
-            "node": {
-                "extensions": [".js", ".jsx", ".ts", ".tsx"]
-            }
-        }
     }
+    // "settings": {
+    //     "import/resolver": {
+    //         "webpack": {
+    //             "config": "./webpack.config.js"
+    //         },
+    //         "typescript": {
+    //             "config": "./tsconfig.json"
+    //         },
+    //         "node": {
+    //             "extensions": [".js", ".jsx", ".ts", ".tsx"]
+    //         }
+    //     }
+    // }
 }

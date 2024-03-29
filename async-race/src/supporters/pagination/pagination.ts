@@ -1,5 +1,3 @@
-/* eslint-disable import/no-unresolved */
-// eslint-disable-next-line import/extensions
 import { IPaginationGenerator } from '@/core/types/interfaces';
 
 type TRange = {
@@ -8,6 +6,9 @@ type TRange = {
 };
 
 class PaginationGenerator implements IPaginationGenerator {
+    static getRange(currentPage: string, pages: number): (string | number)[] {
+        throw new Error('Method not implemented.');
+    }
     currentPageNumber: number;
 
     pageCount: number;

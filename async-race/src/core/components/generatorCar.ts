@@ -1,10 +1,8 @@
-/* eslint-disable import/no-unresolved */
 import Component from '@core/templates/component';
 import Database from '@database/database';
 import Store from '@core/store/store';
-import { Endpoints, Defaults } from '@core/types/enum';
+import { Endpoints, Defaults, Pagination, Event } from '@core/types/enum';
 import { ICar } from '@core/types/interfaces';
-// eslint-disable-next-line import/extensions
 import CarRandomGenerate from '@/supporters/generateRandomCars/generateRandomCars';
 
 export default class GeneratorCar extends Component {
@@ -46,7 +44,7 @@ export default class GeneratorCar extends Component {
 
         create.button.addEventListener('click', async () => {
             await database.createCar(create.inputForTitle.value, create.inputForColor.value);
-            event.notify('update');
+            event.notify(Event.update);
         });
         return create.divInput;
     }
@@ -66,10 +64,10 @@ export default class GeneratorCar extends Component {
 
         update.button.addEventListener('click', async () => {
             await database.updateCar(update.inputForTitle.value, update.inputForColor.value, id.toString());
-            event.notify('update');
+            event.notify(Event.update);
         });
 
-        const currentPage = sessionStorage.getItem('currentPage') ?? Defaults.defaultPage;
+        const currentPage = sessionStorage.getItem(`${Pagination.garage}currentPage`) ?? Defaults.defaultPage;
         const cars = await database.getCars(Endpoints.garage, currentPage);
 
         cars.items.forEach((car) => {
@@ -114,7 +112,7 @@ export default class GeneratorCar extends Component {
                     await db.createCar(car.name, car.color);
                 })
             )
-                .then(() => event.notify('updateCars'))
+                .then(() => event.notify(Event.updateCars))
                 .catch((error) => error);
         });
     }

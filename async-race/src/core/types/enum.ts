@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 /* eslint-disable no-unused-vars */
 const enum PageIds {
     Garage = 'garage',

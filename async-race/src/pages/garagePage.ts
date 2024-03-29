@@ -1,5 +1,3 @@
-/* eslint-disable import/extensions */
-/* eslint-disable import/no-unresolved */
 import Page from '@core/templates/page';
 import Database from '@/database/database';
 import Garage from '@/core/components/garage';

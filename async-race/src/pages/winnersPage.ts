@@ -1,5 +1,3 @@
-/* eslint-disable import/no-unresolved */
-/* eslint-disable import/extensions */
 import Page from '@core/templates/page';
 import Winners from '@/core/components/winners';
 

@@ -1,5 +1,3 @@
-/* eslint-disable import/extensions */
-/* eslint-disable import/no-unresolved */
 import TGetCars from '@core/types/types';
 import { Endpoints, Methods } from '@core/types/enum';
 import { ICar } from '@/core/types/interfaces';
