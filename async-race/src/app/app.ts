@@ -1,10 +1,11 @@
 import Page from '@core/templates/page';
-import { PageIds } from '@core/types/enum';
+import { PageIds, Event } from '@core/types/enum';
 import Header from '@core/layouts/header';
 import Main from '@core/layouts/main';
 import Footer from '@core/layouts/footer';
 import GaragePage from '@pages/garagePage';
 import WinnersPage from '@pages/winnersPage';
+import Store from '@/core/store/store';
 
 export default class App {
     private static body: HTMLElement = document.body;
@@ -27,6 +28,11 @@ export default class App {
         } else if (idPage === PageIds.Winners) {
             page = new WinnersPage(idPage);
             App.url = idPage;
+            const event = Store.getFromEvent('event');
+            if (!event) throw new Error('Event is undefined');
+            if (Store.getIsClickedRace()) {
+                event.notify(Event.reset);
+            }
         }
 
         if (page) {

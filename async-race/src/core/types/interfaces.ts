@@ -5,6 +5,7 @@ export interface ICar {
     color: string;
     wins?: number;
     time?: number;
+    state?: { velocity: number; distance: number };
 }
 
 export interface ICarRandomGenerate {
