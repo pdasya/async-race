@@ -1,4 +1,4 @@
-import { Endpoints, Defaults, Engine, Pagination, Event, Code } from '@core/types/enum';
+import { Endpoints, Defaults, Engine, Pagination, Event, Code, PageIds } from '@core/types/enum';
 import { ICar, IStateCar } from '@core/types/interfaces';
 import Component from '@core/templates/component';
 import Car from '@core/components/car';
@@ -41,7 +41,7 @@ class Garage extends Component {
     generatePageTitle(): HTMLHeadingElement {
         const title = document.createElement('h2');
         title.classList.add('garage__page-title');
-        const currentPage = sessionStorage.getItem('currentPage') ?? Defaults.defaultPage;
+        const currentPage = sessionStorage.getItem(`${Pagination.garage}currentPage`) ?? Defaults.defaultPage;
         title.innerHTML = `Page #${currentPage}`;
         return title;
     }
@@ -118,19 +118,15 @@ class Garage extends Component {
         }
     };
 
-    eventListener(currentPage: string): void {
+    eventListener(): void {
         Store.addToEvent('event', this.event);
         this.event.subscribe(async (event) => {
-            const currentPage = sessionStorage.getItem('currentPage') ?? Defaults.defaultPage;
+            const currentPage = sessionStorage.getItem(`${Pagination.garage}currentPage`) ?? Defaults.defaultPage;
             const dataCars = await this.database.getCars('garage', currentPage);
             const currentId = Store.getCurrentId();
             switch (event) {
                 case 'update':
-                    this.rerenderCars(dataCars);
-                    await this.rerenderInterface();
-                    await this.rerenderPagination();
-                    this.toggleUpdateButton('disable');
-                    break;
+                    await this.update(dataCars); 
                 case 'updateCars':
                     this.rerenderCars(dataCars);
                     await this.rerenderPagination();
@@ -140,12 +136,12 @@ class Garage extends Component {
                     this.toggleUpdateButton('enable');
                     break;
                 case 'race':
-                    this.isClickedRace = true;
+                    Store.setIsClickedRace(true);
                     this.toggleRaceResetButtons('all');
                     await this.raceAllCar(dataCars.items);
                     break;
                 case 'reset':
-                    this.isClickedRace = false;
+                    Store.setIsClickedRace(false);
                     await this.resetAllCars(dataCars.items);
                     break;
                 case 'start':
@@ -160,6 +156,25 @@ class Garage extends Component {
             }
         });
     }
+
+    togglePageButtons(variant: string) {
+        const navButtonWinner = Store.getFromStore(`navButton${PageIds.Winners}`);
+        if (!navButtonWinner) throw new Error('NavButtonWinner is undefined');
+        if (!(navButtonWinner instanceof HTMLAnchorElement)) throw new Error('NavButtonWinner is not HTMLAnchorElement');
+        if (variant === 'enable') {
+          navButtonWinner.classList.remove('nav-button--disabled');
+        }
+        if (variant === 'disable') {
+          navButtonWinner.classList.add('nav-button--disabled');
+        }
+      }
+
+    update = async (dataCars: TGetCars) => {
+        this.rerenderCars(dataCars);
+        await this.rerenderInterface();
+        await this.rerenderPagination();
+        this.toggleUpdateButton('disable');
+      };
 
     toggleUpdateButton(variant: string) {
         const update = Store.getFromStore('updateInterface');
@@ -239,6 +254,7 @@ class Garage extends Component {
     async raceAllCar(cars: ICar[]) {
         let isNotFinished = true;
         this.toggleRaceResetButtons('all');
+        this.togglePageButtons('disable');
         await Promise.all(
             cars.map(async (car) => {
                 if (car.id === undefined) throw new Error('Car id is not defined');
@@ -265,7 +281,7 @@ class Garage extends Component {
             })
         );
 
-        this.isClickedRace = false;
+        Store.setIsClickedRace(false);
         this.togglePaginationButtons('enable');
     }
 
@@ -350,12 +366,12 @@ class Garage extends Component {
         const res = this.animationCar(carModel, distanceWindow, time);
         Store.addToStore(`carState${id}`, res);
         await this.database.switchCarEngine(id, Engine.drive).then((response) => {
-            if (response.status !== Code.Success) {
+            if (response.status === Code.InternalServerError) {
                 cancelAnimationFrame(res.id);
             }
             return response;
         });
-        if (!this.isClickedRace) {
+        if (!Store.getIsClickedRace()) {
             this.togglePaginationButtons('enable');
         }
         this.toggleRaceResetButtons('disable');
@@ -428,7 +444,7 @@ class Garage extends Component {
         if (!updateColor || !(updateColor instanceof HTMLInputElement))
           throw new Error('UpdateColor is not HTMLDivElement');
     
-        const currentPage = sessionStorage.getItem(`currentPage`) ?? Defaults.defaultPage;
+        const currentPage = sessionStorage.getItem(`${Pagination.garage}currentPage`) ?? Defaults.defaultPage;
         const cars = await this.database.getCars(Endpoints.garage, currentPage);
         cars.items.forEach((car) => {
           if (car.id === id) {
@@ -491,7 +507,7 @@ class Garage extends Component {
 
     async renderGarage(): Promise<HTMLElement> {
         const currentPage = sessionStorage.getItem(`currentPage`) ?? Defaults.defaultPage;
-        this.eventListener(currentPage);
+        this.eventListener();
         const data = await this.appendAll(this.data, this.total);
         const { containerCar, generatorCar } = data;
         Store.addToStore('containerCar', containerCar);

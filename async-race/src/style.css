@@ -15,6 +15,8 @@
     --gray: #CBD4C2;
     --darkgray: #9AA5A1;
     --disabled: #EBEBE4;
+    --buttonDisabled: #D3D3D3; 
+    --buttonBackgroundDisabled: #A9A9A9;
 }
 
 * {
@@ -64,6 +66,13 @@ html, body {
     color: var(--primary);
     background-color: var(--buttonBackgroundHover);
     border: 2px solid var(--primary);
+}
+
+.header .nav-button--disabled {
+    color: var(--buttonDisabled);
+    background-color: var(--buttonBackgroundDisabled);
+    border: 2px solid var(--buttonDisabled);
+    pointer-events: none;
 }
 
 .main {

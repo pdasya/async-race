@@ -3,6 +3,7 @@ import PaginationGenerator from '@supporters/pagination/pagination';
 import { Defaults, Endpoints, Event, Pagination } from '@core/types/enum';
 import Store from '@core/store/store';
 import Database from '@/database/database';
+import { IPaginationGenerator } from '@core/types/interfaces';
 
 export default class Component {
     container: HTMLElement;
@@ -37,7 +38,8 @@ export default class Component {
         name: string,
         maxPage: number = 7
       ): Promise<HTMLUListElement> {
-        const currentPage = sessionStorage.getItem(`${name}currentPage`) ?? Defaults.defaultPage;
+        const currentPageStr = sessionStorage.getItem(`${name}currentPage`) ?? Defaults.defaultPage;
+        const currentPage = Number(currentPageStr);
         const db = new Database();
         let data: TGetCars | null = null;
         if (maxPage === 7) {
@@ -47,7 +49,8 @@ export default class Component {
         }
         if (!data) throw new Error('Data is undefined');
         const pages = Math.ceil(Number(data.total) / maxPage);
-        const pagesArray: (string | number)[] = getPaginationGenerator(currentPage, pages);
+        const pagination: IPaginationGenerator = new PaginationGenerator(currentPage, pages);
+        const pagesArray: (string | number)[] = pagination.generate();
     
         pagesArray.map((pageItem) => {
           const paginationItem = document.createElement('li');
@@ -56,7 +59,7 @@ export default class Component {
           const id = Number(paginationItem.textContent);
           paginationItem.id = `${id}`;
     
-          this.toggleActiveClass(paginationItem, id, currentPage);
+          this.toggleActiveClass(paginationItem, id, currentPage.toString());
           this.togglePage(paginationItem, name);
     
           return paginationUl.append(paginationItem);

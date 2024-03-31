@@ -2,7 +2,7 @@ import TGetCars from '@core/types/types';
 import { Endpoints, Methods } from '@core/types/enum';
 import { ICar } from '@/core/types/interfaces';
 
-const BASE = 'http://127.0.0.1:3000';
+const BASE = 'http://localhost:3000';
 
 export default class Database {
     getCars = async (endpoint: string, page: number | string, limit: number | string = 7): Promise<TGetCars> => {
