@@ -18,7 +18,7 @@ export default class App {
 
     private static footer: Footer = new Footer('footer', 'footer');
 
-    static createNewPage(idPage: string): void {
+    static renderNewPage(idPage: string): void {
         if (App.url) App.url = null;
         let page: Page | null = null;
 
@@ -37,17 +37,17 @@ export default class App {
 
         if (page) {
             (async () => {
-                const pageHTML = await page.getContainer();
+                const pageHTML = await page.render();
                 App.url = PageIds.Default;
-                App.main.refreshMainContainer().append(pageHTML);
+                App.main.rerender().append(pageHTML);
             })();
         }
     }
 
-    enableRouteChange(): void {
+    private enableRouteChange(): void {
         window.addEventListener('hashchange', () => {
             const hash = window.location.hash.slice(1);
-            App.createNewPage(hash);
+            App.renderNewPage(hash);
         });
     }
 
@@ -55,7 +55,7 @@ export default class App {
         const pageWrapper = document.createElement('div');
         pageWrapper.classList.add('page-wrapper');
         pageWrapper.append(App.header.getNavContainer());
-        pageWrapper.append(App.main.getMainElement());
+        pageWrapper.append(App.main.render());
         pageWrapper.append(App.footer.getFooterContainer());
         App.body.append(pageWrapper);
     }
@@ -64,6 +64,6 @@ export default class App {
         this.generatePage();
         this.enableRouteChange();
         window.location.hash = PageIds.Garage;
-        App.createNewPage(PageIds.Garage);
+        App.renderNewPage(PageIds.Garage);
     }
 }

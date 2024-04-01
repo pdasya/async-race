@@ -1,7 +1,7 @@
 import Component from '@core/templates/component';
 import Database from '@database/database';
 import Store from '@core/store/store';
-import { Endpoints, Defaults, Pagination, Event } from '@core/types/enum';
+import { Defaults, Pagination, Event } from '@core/types/enum';
 import { ICar } from '@core/types/interfaces';
 import CarRandomGenerate from '@/supporters/generateRandomCars/generateRandomCars';
 
@@ -72,7 +72,7 @@ export default class GeneratorCar extends Component {
         if (event === undefined) throw new Error('Event is undefined');
 
         const carBefore = Store.getFromStore('car');
-        const id = carBefore?.id || '1';
+        const id = carBefore?.id || Defaults.defaultPage;
 
         update.button.addEventListener('click', async () => {
             await database.updateCar(update.inputForTitle.value, update.inputForColor.value, id.toString());
@@ -91,7 +91,7 @@ export default class GeneratorCar extends Component {
         return update.divInput;
     }
 
-    async generateButton(name: string): Promise<HTMLButtonElement> {
+    generateButton(name: string): HTMLButtonElement {
         const button = document.createElement('button');
         button.classList.add('car-generator__button');
         button.innerHTML = name;
@@ -107,14 +107,14 @@ export default class GeneratorCar extends Component {
         const generateCars = this.generateButton('generate cars');
         Store.addToStore('race', race);
         Store.addToStore('reset', reset);
-        Store.addToStore('generateCars', await generateCars);
-        this.generateRandomCars(await generateCars);
-        wrapper.append(race, reset, await generateCars);
+        Store.addToStore('generateCars', generateCars);
+        this.generateRandomCars(generateCars);
+        wrapper.append(race, reset, generateCars);
         return wrapper;
     }
 
     async generateRandomCars(button: HTMLButtonElement): Promise<void> {
-        const db = new Database();
+        const database = new Database();
         const event = Store.getFromEvent('event');
         if (!event) throw new Error('Event is undefined');
         const oneHundredCars: ICar[] = new CarRandomGenerate().generateOneHundredCars();
@@ -122,7 +122,7 @@ export default class GeneratorCar extends Component {
         button.addEventListener('click', async () => {
             Promise.all(
                 oneHundredCars.map(async (car) => {
-                    await db.createCar(car.name, car.color);
+                    await database.createCar(car.name, car.color);
                 })
             )
                 .then(() => event.notify(Event.updateCars))
@@ -133,7 +133,7 @@ export default class GeneratorCar extends Component {
     async enableListenerAndGenerateButton(name: string) {
         const element = this.generateButton(name);
 
-        (await element).addEventListener('click', async () => {
+        element.addEventListener('click', async () => {
             const event = Store.getFromEvent('event');
             if (!event) throw new Error('Event is undefined');
             event.notify(name);

@@ -13,8 +13,8 @@ export default class GaragePage extends Page {
         return result;
     }
 
-    async getGaragePageContainer(): Promise<HTMLElement> {
-        this.container.append(await this.getCars());
-        return this.container;
+    async render(): Promise<HTMLElement> {
+    this.container.append(await this.getCars());
+    return this.container;
     }
 }

@@ -26,6 +26,7 @@ export default class Header extends Component {
             const navButton = document.createElement('a');
             navButton.classList.add('header__nav-btn');
             navButton.setAttribute('href', `#${button.id}`);
+            navButton.setAttribute('id', button.id);
             Store.addToStore(`navButton${button.id}`, navButton);
             navButton.textContent = button.text;
             navButtons.append(navButton);

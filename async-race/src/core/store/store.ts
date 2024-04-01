@@ -54,10 +54,6 @@ export default class Store {
         return Store.event.get(key);
     }
 
-    static getEvent(): Map<string, EventObserver<unknown>> {
-        return Store.event;
-    }
-
     static addToEvent(key: string, value: EventObserver<unknown>) {
         Store.event.set(key, value);
     }

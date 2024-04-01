@@ -6,7 +6,7 @@ import Database from '@/database/database';
 import { IPaginationGenerator } from '@core/types/interfaces';
 
 export default class Component {
-    container: HTMLElement;
+    protected container: HTMLElement;
 
     constructor(tagName: string, className: string) {
         this.container = document.createElement(tagName);

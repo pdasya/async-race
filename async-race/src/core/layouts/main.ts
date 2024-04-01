@@ -1,19 +1,19 @@
 import Component from '@core/templates/component';
 
 export default class Main extends Component {
-    createMainElement() {
+    renderMain() {
         const main = document.createElement('main');
         main.classList.add('main');
     }
 
-    refreshMainContainer() {
+    rerender() {
         this.container.innerHTML = '';
-        this.createMainElement();
+        this.renderMain();
         return this.container;
     }
 
-    getMainElement() {
-        this.createMainElement();
+    render() {
+        this.renderMain();
         return this.container;
     }
 }
