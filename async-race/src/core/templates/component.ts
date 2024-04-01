@@ -2,8 +2,8 @@ import TGetCars from '@core/types/types';
 import PaginationGenerator from '@supporters/pagination/pagination';
 import { Defaults, Endpoints, Event, Pagination } from '@core/types/enum';
 import Store from '@core/store/store';
-import Database from '@/database/database';
 import { IPaginationGenerator } from '@core/types/interfaces';
+import Database from '@/database/database';
 
 export default class Component {
     protected container: HTMLElement;

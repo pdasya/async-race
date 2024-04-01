@@ -67,6 +67,7 @@ class Garage extends Component {
           switch (event) {
               case 'update':
                   await this.update(dataCars); 
+                  break;
               case 'updateCars':
                   this.rerenderCars(dataCars);
                   await this.rerenderPagination();

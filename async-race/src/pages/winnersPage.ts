@@ -1,5 +1,5 @@
-import Database from '@/database/database';
 import Page from '@core/templates/page';
+import Database from '@/database/database';
 import Winners from '@/core/components/winners';
 import { Defaults, Pagination } from '@/core/types/enum';
 

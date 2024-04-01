@@ -1,4 +1,3 @@
-import { Defaults, Event, Pagination, Sort } from '../types/enum';
 import { ICar } from '@core/types/interfaces';
 import Database from '@database/database';
 import Component from '@core/templates/component';
@@ -6,6 +5,7 @@ import getCarImage from '@supporters/getCarImage/getCarImage';
 import Store from '@core/store/store';
 import EventObserver from '@core/eventObservers/eventObserver';
 import TGetCars from '@core/types/types';
+import { Defaults, Event, Pagination, Sort } from '../types/enum';
 
 class Winners extends Component {
     database: Database;
