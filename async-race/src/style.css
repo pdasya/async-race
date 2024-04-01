@@ -2,40 +2,40 @@
     font-family: Akzidenz;
     font-weight: 700;
     font-style: normal;
-    src: url("../src/assets/fonts/AkzidenzGroteskPro-BoldEx.otf") format("opentype");
-  }
-  @font-face {
+    src: url('../src/assets/fonts/AkzidenzGroteskPro-BoldEx.otf') format('opentype');
+}
+@font-face {
     font-family: Akzidenz;
     font-weight: 500;
     font-style: normal;
-    src: url("../src/assets/fonts/AkzidenzGroteskPro-Md.otf") format("opentype");
-  }
-  @font-face {
+    src: url('../src/assets/fonts/AkzidenzGroteskPro-Md.otf') format('opentype');
+}
+@font-face {
     font-family: Akzidenz;
     font-weight: 400;
     font-style: normal;
-    src: url("../src/assets/fonts/AkzidenzGroteskPro-Regular.otf") format("opentype");
-  }
+    src: url('../src/assets/fonts/AkzidenzGroteskPro-Regular.otf') format('opentype');
+}
 
 :root {
-    --white: #FFFFFA;
-    --black: #4A4A48;
-    --primary: #A8DADC;
-    --secondary: #F4A261;
-    --filterTitle: #F1FAEE;
-    --background: #B3D4E0;
+    --white: #fffffa;
+    --black: #4a4a48;
+    --primary: #a8dadc;
+    --secondary: #f4a261;
+    --filterTitle: #f1faee;
+    --background: #b3d4e0;
     --labelActive: var(--white);
-    --labelBackground: #A8DADC;
-    --labelBackgroundActive: #F4A261;
-    --buttonBackground: #A8DADC;
+    --labelBackground: #a8dadc;
+    --labelBackgroundActive: #f4a261;
+    --buttonBackground: #a8dadc;
     --buttonColor: var(--black);
     --buttonBackgroundHover: var(--black);
     --buttonColorHover: var(--white);
-    --gray: #CBD4C2;
-    --darkgray: #9AA5A1;
-    --disabled: #EBEBE4;
-    --buttonDisabled: #D3D3D3; 
-    --buttonBackgroundDisabled: #A9A9A9;
+    --gray: #cbd4c2;
+    --darkgray: #9aa5a1;
+    --disabled: #ebebe4;
+    --buttonDisabled: #d3d3d3;
+    --buttonBackgroundDisabled: #a9a9a9;
 }
 
 * {
@@ -45,7 +45,8 @@
     font-family: Akzidenz, sistem-ui, sans-serif;
 }
 
-html, body {
+html,
+body {
     height: 100%;
 }
 
@@ -219,7 +220,7 @@ button {
 .car__button-start:hover,
 .car__button-stop:hover {
     background-color: var(--black);
-    color: var(--white); 
+    color: var(--white);
 }
 
 .car__wrapper {
@@ -262,7 +263,7 @@ button {
     align-items: center;
     font-size: 1.3rem;
     font-weight: bold;
-    color:var(--black);
+    color: var(--black);
 }
 
 .garage__page-title {
@@ -412,7 +413,7 @@ button {
 
 .pagination__item--disabled {
     background-color: var(--disabled);
-    color:var(--black);
+    color: var(--black);
     pointer-events: none;
 }
 .pagination__item--disabled .pagination__item {
@@ -439,20 +440,20 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+}
 
-  .winners__cars-container {
+.winners__cars-container {
     background-color: var(--darkgray);
     width: 100%;
     height: fit-content;
     padding-bottom: 50px;
-  }
+}
 
-  .winners__page {
+.winners__page {
     margin-top: 10px;
-  }
+}
 
-  .winners__navigation {
+.winners__navigation {
     font-weight: 500;
     background-color: var(--background);
     width: 100%;
@@ -462,43 +463,45 @@ button {
     justify-content: space-between;
     align-items: center;
     text-decoration: none;
-  }
+}
 
-  .winners__navigation-item {
+.winners__navigation-item {
     display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100px;
-      height: 100%;
-      color: var(--black);
-      text-decoration: none;
-      cursor: pointer;
-  }
-
-  .winners__navigation-item-toggle {
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100%;
+    color: var(--black);
+    text-decoration: none;
     cursor: pointer;
-  }
+}
 
-  .winners__navigation-item-toggle.asc .winners__navigation-item-up,
-  .winners__navigation-item-toggle.desc .winners__navigation-item-down {
+.winners__navigation-item-toggle {
+    cursor: pointer;
+}
+
+.winners__navigation-item-toggle.asc .winners__navigation-item-up,
+.winners__navigation-item-toggle.desc .winners__navigation-item-down {
     color: var(--white);
-  }
+}
 
-  .winners__navigation-item-toggle.asc .winners__navigation-item-down
-  .winners__navigation-item-toggle.desc .winners__navigation-item-up {
+.winners__navigation-item-toggle.asc
+    .winners__navigation-item-down
+    .winners__navigation-item-toggle.desc
+    .winners__navigation-item-up {
     color: var(--white);
-  }
+}
 
-  .winners__navigation-item:hover {
+.winners__navigation-item:hover {
     color: var(--white);
-  }
+}
 
-  .winners__navigation-item svg {
+.winners__navigation-item svg {
     width: 70px;
     height: 40px;
-  }
+}
 
-  .winners__car {
+.winners__car {
     font-weight: 500;
     background-color: var(--darkgray);
     width: 100%;
@@ -510,25 +513,19 @@ button {
     text-decoration: none;
     border: 1px solid var(--black);
     margin: 5px 0;
-  }
+}
 
-  .winners__car-item {
+.winners__car-item {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100px;
     height: 100%;
-    color:var(--black);
+    color: var(--black);
     text-decoration: none;
-  }
+}
 
-  .winners__car-item svg {
+.winners__car-item svg {
     width: 70px;
     height: 40px;
-  }
-
-
-
-
-
-
+}

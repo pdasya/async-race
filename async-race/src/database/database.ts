@@ -69,9 +69,9 @@ export default class Database {
         sort: string = '',
         order: string = '',
         limit: number | string = 10
-      ): Promise<TGetCars> => {
+    ): Promise<TGetCars> => {
         const response = await fetch(
-          `${BASE}/${Endpoints.winners}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`
+            `${BASE}/${Endpoints.winners}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`
         );
         return {
             items: await response.json(),

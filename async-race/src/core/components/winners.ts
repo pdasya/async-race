@@ -46,9 +46,9 @@ class Winners extends Component {
             const currentPage = sessionStorage.getItem(`${Pagination.winners}currentPage`) ?? Defaults.defaultPage;
             let number = index + 1;
             if (Number(currentPage) > 1) {
-              number += Number(currentPage) * 10 - 10;
+                number += Number(currentPage) * 10 - 10;
             }
-      
+
             const { id, wins, time } = car;
             if (!id) throw new Error('Id is undefined');
             const car1 = await this.database.getCar(id);
@@ -56,48 +56,48 @@ class Winners extends Component {
             const carInfo = { name, color, id, wins, time };
             const carHTML = this.generateContent('car', carInfo, number);
             carsContainer.append(carHTML);
-          });
-          carsContainer.append(navigation);
-          this.container.append(carsContainer);
-          return carsContainer;
-        }
+        });
+        carsContainer.append(navigation);
+        this.container.append(carsContainer);
+        return carsContainer;
+    }
 
     generateContent(value: string, car?: ICar | undefined, index: number = 1): HTMLUListElement {
         const element = this.generateElement('ul', value);
-    if (!(element instanceof HTMLUListElement)) throw new Error('Element is not HTMLUListElement');
-    const number = this.generateElement('li', value);
-    const carModel = this.generateElement('li', value);
-    const carName = this.generateElement('li', value);
-    const carWins = this.generateElement('li', value);
-    const carBestTime = this.generateElement('li', value);
-    if (!car) {
-        if (sessionStorage.getItem('orderWins') === Sort.DESC) {
-          carWins.classList.add('desc');
-          carWins.classList.remove('asc');
+        if (!(element instanceof HTMLUListElement)) throw new Error('Element is not HTMLUListElement');
+        const number = this.generateElement('li', value);
+        const carModel = this.generateElement('li', value);
+        const carName = this.generateElement('li', value);
+        const carWins = this.generateElement('li', value);
+        const carBestTime = this.generateElement('li', value);
+        if (!car) {
+            if (sessionStorage.getItem('orderWins') === Sort.DESC) {
+                carWins.classList.add('desc');
+                carWins.classList.remove('asc');
+            } else {
+                carWins.classList.remove('desc');
+                carWins.classList.add('asc');
+            }
+            if (sessionStorage.getItem('orderTime') === Sort.DESC) {
+                carBestTime.classList.add('desc');
+                carBestTime.classList.remove('asc');
+            } else {
+                carBestTime.classList.remove('desc');
+                carBestTime.classList.add('asc');
+            }
+            this.enableListenersOnButton(carWins, 'wins');
+            this.enableListenersOnButton(carBestTime, 'bestTime');
+            this.fillItems(number, carModel, carName, carWins, carBestTime);
         } else {
-          carWins.classList.remove('desc');
-          carWins.classList.add('asc');
+            if (!car.id || !car.wins || !car.time) throw new Error('Id | wins | time is undefined');
+            carModel.innerHTML = getCarImage(car.color);
+            number.textContent = `${index}`;
+            carName.textContent = car.name;
+            carWins.textContent = `${car.wins}`;
+            carBestTime.textContent = `${car.time}`;
         }
-        if (sessionStorage.getItem('orderTime') === Sort.DESC) {
-          carBestTime.classList.add('desc');
-          carBestTime.classList.remove('asc');
-        } else {
-          carBestTime.classList.remove('desc');
-          carBestTime.classList.add('asc');
-        }
-        this.enableListenersOnButton(carWins, 'wins');
-        this.enableListenersOnButton(carBestTime, 'bestTime');
-        this.fillItems(number, carModel, carName, carWins, carBestTime);
-      } else {
-        if (!car.id || !car.wins || !car.time) throw new Error('Id | wins | time is undefined');
-        carModel.innerHTML = getCarImage(car.color);
-        number.textContent = `${index}`;
-        carName.textContent = car.name;
-        carWins.textContent = `${car.wins}`;
-        carBestTime.textContent = `${car.time}`;
-      }
-      element.append(number, carModel, carName, carWins, carBestTime);
-      return element;
+        element.append(number, carModel, carName, carWins, carBestTime);
+        return element;
     }
 
     fillItems(
@@ -106,7 +106,7 @@ class Winners extends Component {
         carName: HTMLLIElement | HTMLUListElement,
         carWins: HTMLLIElement | HTMLUListElement,
         carBestTime: HTMLLIElement | HTMLUListElement
-      ): void {
+    ): void {
         const [num, model, name, wins, time] = [number, carModel, carName, carWins, carBestTime];
         const [carWinsUp, carWinsDown] = this.generateUpDownNavigation();
         const [carBestTimeUp, carBestTimeDown] = this.generateUpDownNavigation();
@@ -120,73 +120,73 @@ class Winners extends Component {
         time.textContent = `Best time`;
         time.classList.add('winners__navigation-item-toggle');
         time.append(carBestTimeUp, carBestTimeDown);
-      }
-    
-      enableListenersOnButton(btn: HTMLLIElement | HTMLDListElement, variant: string): void {
+    }
+
+    enableListenersOnButton(btn: HTMLLIElement | HTMLDListElement, variant: string): void {
         btn.addEventListener('click', () => {
-          Store.addToStore('currentBtn', btn);
-          if (variant === 'wins') {
-            const order = sessionStorage.getItem('orderWins') ?? Sort.DESC;
-            sessionStorage.setItem('sort', 'wins');
-            if (order === Sort.DESC) {
-              sessionStorage.setItem('orderWins', Sort.ASC);
-            } else {
-              sessionStorage.setItem('orderWins', Sort.DESC);
+            Store.addToStore('currentBtn', btn);
+            if (variant === 'wins') {
+                const order = sessionStorage.getItem('orderWins') ?? Sort.DESC;
+                sessionStorage.setItem('sort', 'wins');
+                if (order === Sort.DESC) {
+                    sessionStorage.setItem('orderWins', Sort.ASC);
+                } else {
+                    sessionStorage.setItem('orderWins', Sort.DESC);
+                }
             }
-          }
-          if (variant === 'bestTime') {
-            const order = sessionStorage.getItem('orderTime') ?? Sort.DESC;
-            sessionStorage.setItem('sort', 'time');
-            if (order === Sort.DESC) {
-              sessionStorage.setItem('orderTime', Sort.ASC);
-            } else {
-              sessionStorage.setItem('orderTime', Sort.DESC);
+            if (variant === 'bestTime') {
+                const order = sessionStorage.getItem('orderTime') ?? Sort.DESC;
+                sessionStorage.setItem('sort', 'time');
+                if (order === Sort.DESC) {
+                    sessionStorage.setItem('orderTime', Sort.ASC);
+                } else {
+                    sessionStorage.setItem('orderTime', Sort.DESC);
+                }
             }
-          }
-          this.event.notify(Event.update);
+            this.event.notify(Event.update);
         });
-      }
-    
-      generateElement(tag: string, value: string): HTMLUListElement | HTMLLIElement {
+    }
+
+    generateElement(tag: string, value: string): HTMLUListElement | HTMLLIElement {
         if (tag === 'ul') {
-          const element: HTMLUListElement | HTMLLIElement = document.createElement(tag);
-          element.classList.add(`winners__${value}`);
-          return element;
+            const element: HTMLUListElement | HTMLLIElement = document.createElement(tag);
+            element.classList.add(`winners__${value}`);
+            return element;
         }
         const element: HTMLLIElement = document.createElement('li');
         element.classList.add(`winners__${value}-item`);
         return element;
-      }
-    
-      generateUpDownNavigation(): [up: HTMLSpanElement, down: HTMLSpanElement] {
+    }
+
+    generateUpDownNavigation(): [up: HTMLSpanElement, down: HTMLSpanElement] {
         const up = document.createElement('span');
         up.classList.add('winners__navigation-item-up');
         up.textContent = '↑';
         const down = document.createElement('span');
         down.classList.add('winners__navigation-item-down');
         down.textContent = '↓';
-    
+
         return [up, down];
-      }
-    
-      eventListener(): void {
+    }
+
+    eventListener(): void {
         Store.addToEvent('eventWinners', this.event);
         this.event.subscribe(async (event) => {
-          const currentPage = sessionStorage.getItem(`${Pagination.winners}currentPage`) ?? Defaults.defaultPage;
-          const sort = sessionStorage.getItem('sort') ?? '';
-          const orderWins = sessionStorage.getItem('orderWins') ?? Sort.DESC;
-          const orderTime = sessionStorage.getItem('orderTime') ?? Sort.DESC;
-          if (sort === undefined) throw new Error('Sort is undefined');
-          const order = sort === 'wins' ? orderWins : orderTime;
-          const dataCars = await this.database.getWinners(currentPage, sort, order);
-          switch (event) {
-            case Event.update:
-              this.rerenderWinners(dataCars);
-              break;
-            default:
-          }
+            const currentPage = sessionStorage.getItem(`${Pagination.winners}currentPage`) ?? Defaults.defaultPage;
+            const sort = sessionStorage.getItem('sort') ?? '';
+            const orderWins = sessionStorage.getItem('orderWins') ?? Sort.DESC;
+            const orderTime = sessionStorage.getItem('orderTime') ?? Sort.DESC;
+            if (sort === undefined) throw new Error('Sort is undefined');
+            const order = sort === 'wins' ? orderWins : orderTime;
+            const dataCars = await this.database.getWinners(currentPage, sort, order);
+            switch (event) {
+                case Event.update:
+                    this.rerenderWinners(dataCars);
+                    break;
+                default:
+            }
         });
-      }
+    }
 
     async appendAll(): Promise<HTMLElement> {
         const titlePage = await this.generateTitle();
@@ -201,7 +201,7 @@ class Winners extends Component {
         await this.generateCarsWinner(data);
         this.container.append(await this.generatePagination(Pagination.winners, 10));
         return this.container;
-      }
+    }
 
     async renderWinners(): Promise<HTMLElement> {
         this.eventListener();

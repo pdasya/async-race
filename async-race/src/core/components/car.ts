@@ -84,16 +84,16 @@ class Car extends Component {
         sessionStorage.removeItem('updateColor');
         if (!title || !(title instanceof HTMLInputElement)) throw new Error('Title input is not HTMLInputElement');
         if (!color || !(color instanceof HTMLInputElement)) throw new Error('Color input is not HTMLInputElement');
-    
+
         title.value = '';
         color.value = '#000000';
-      }
+    }
 
-      getElement(key: string) {
+    getElement(key: string) {
         const value = Store.getFromStore(key);
         if (!value) throw new Error(`${key} is undefined`);
         return value;
-      }
+    }
 
     enableListenersOnButton(button: HTMLButtonElement, id: string, option: string): void {
         button.addEventListener('click', async () => {
@@ -104,38 +104,38 @@ class Car extends Component {
     generateCar(color: string, id: number): HTMLDivElement {
         const container = document.createElement('div');
         container.classList.add('car__container');
-    
+
         const buttonContainer = document.createElement('div');
         buttonContainer.classList.add('car__button-container');
-    
+
         const carStart = this.generateButton('Start', 'car__button--start');
         const carStop = this.generateButton('Stop', 'car__button--stop');
         carStop.classList.add('car__button--disabled');
         Store.addToStore(`carStop${id}`, carStop);
         Store.addToStore(`carStart${id}`, carStart);
-    
+
         this.enableListenersOnButton(carStart, id.toString(), 'start');
         this.enableListenersOnButton(carStop, id.toString(), 'stop');
-    
+
         const carWrapper = document.createElement('div');
         carWrapper.classList.add('car__wrapper');
         const imgSvg: string = getCarImage(color);
-    
+
         const car = document.createElement('div');
         car.classList.add('car__model');
         car.innerHTML = imgSvg;
-    
+
         const finishLine = document.createElement('img');
         finishLine.classList.add('car__finish-line');
         finishLine.src = finish;
-    
+
         Store.addToStore(`carModel${id}`, car);
         Store.addToStore(`carFinishLine${id}`, finishLine);
         buttonContainer.append(carStart, carStop);
         carWrapper.append(car, finishLine);
         container.append(buttonContainer, carWrapper);
         return container;
-      }
+    }
 
     renderCar(name: string, color: string, id: number): HTMLElement {
         const carControls = this.generateCarControllers(name, id);

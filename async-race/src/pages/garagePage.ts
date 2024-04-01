@@ -14,7 +14,7 @@ export default class GaragePage extends Page {
     }
 
     async render(): Promise<HTMLElement> {
-    this.container.append(await this.getCars());
-    return this.container;
+        this.container.append(await this.getCars());
+        return this.container;
     }
 }

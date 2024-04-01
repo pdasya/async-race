@@ -6,28 +6,28 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 module.exports = {
-  mode: 'production',
-  module: {
-    rules: [
-      {
-        test: /\.s?[ac]ss$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
-      },
-    ],
-  },
-  plugins: [new ESLintPlugin({ extensions: ['.ts', '.js'] }), new MiniCssExtractPlugin()],
-  optimization: {
-    minimizer: [
-      new CssMinimizerPlugin(),
-      new TerserPlugin(),
-      new HtmlWebpackPlugin({
-        template: path.resolve(__dirname, './src/index.html'),
-        minify: {
-          removeAttributeQuotes: true,
-          collapseWhitespace: true,
-          removeComments: true,
-        },
-      }),
-    ],
-  },
+    mode: 'production',
+    module: {
+        rules: [
+            {
+                test: /\.s?[ac]ss$/,
+                use: [MiniCssExtractPlugin.loader, 'css-loader'],
+            },
+        ],
+    },
+    plugins: [new ESLintPlugin({ extensions: ['.ts', '.js'] }), new MiniCssExtractPlugin()],
+    optimization: {
+        minimizer: [
+            new CssMinimizerPlugin(),
+            new TerserPlugin(),
+            new HtmlWebpackPlugin({
+                template: path.resolve(__dirname, './src/index.html'),
+                minify: {
+                    removeAttributeQuotes: true,
+                    collapseWhitespace: true,
+                    removeComments: true,
+                },
+            }),
+        ],
+    },
 };
