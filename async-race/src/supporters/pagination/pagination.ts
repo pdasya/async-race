@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved, import/extensions
 import { IPaginationGenerator } from '@/core/types/interfaces';
 
 type TRange = {
@@ -6,19 +7,24 @@ type TRange = {
 };
 
 class PaginationGenerator implements IPaginationGenerator {
-    static getRange(currentPage: string, pages: number): (string | number)[] {
-        throw new Error('Method not implemented.');
-    }
     currentPageNumber: number;
+
     pageCount: number;
+
     showPages: number = 5;
+
     MINIMUM_PAGE_SIZE: number = 7;
+
     delta: number;
+
     currentPage: number;
+
     pagesShown: number;
+
     centerPagesShown: number;
+
     boundaryPagesShown: number;
-    
+
     constructor(currentPageNumber: number, pageCount: number, showPages: number = 5, MINIMUM_PAGE_SIZE: number = 7) {
         this.currentPageNumber = currentPageNumber;
         this.pageCount = pageCount;

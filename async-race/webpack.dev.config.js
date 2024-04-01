@@ -1,9 +1,20 @@
-const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    mode: 'development',
-    devtool: 'inline-source-map',
-    devServer: {
-        static: path.resolve(__dirname, './dist'),
-    },
+  mode: 'development',
+  devtool: 'inline-source-map',
+  module: {
+    rules: [
+      {
+        test: /\.s?[ac]ss$/,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
+  plugins: [new HtmlWebpackPlugin()],
+  devServer: {
+    open: true,
+    hot: true,
+    port: 8080,
+  },
 };

@@ -1,4 +1,4 @@
-import { Endpoints, Defaults, Engine, Pagination, Event, Code, PageIds } from '@core/types/enum';
+import { Endpoints, Defaults, Engine, Pagination, Code, PageIds } from '@core/types/enum';
 import { ICar, IStateCar } from '@core/types/interfaces';
 import Component from '@core/templates/component';
 import Car from '@core/components/car';
@@ -14,7 +14,6 @@ class Garage extends Component {
     event: EventObserver<unknown>;
     total: string;
     database: Database;
-    isClickedRace: boolean;
 
     constructor(tagName: string, className: string, data: TGetCars) {
         super(tagName, className);
@@ -22,7 +21,6 @@ class Garage extends Component {
         this.total = this.data.total || Defaults.carCount;
         this.event = new EventObserver();
         this.database = new Database();
-        this.isClickedRace = false;
     }
 
     async getGeneratorCars(): Promise<HTMLElement> {

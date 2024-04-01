@@ -9,7 +9,7 @@ export default class Component {
     container: HTMLElement;
 
     constructor(tagName: string, className: string) {
-        this.container = document.createElement('div');
+        this.container = document.createElement(tagName);
         this.container.className = className;
     }
 

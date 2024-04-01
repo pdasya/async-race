@@ -1,8 +1,6 @@
 export default class Page {
     container: HTMLElement;
 
-    static TextObject = {};
-
     constructor(id: string) {
         this.container = document.createElement('div');
         this.container.className = 'main-container';
@@ -11,11 +9,11 @@ export default class Page {
 
     createHeaderTitle(text: string) {
         const headerTitle = document.createElement('h1');
-        headerTitle.textContent = text;
+        headerTitle.innerText = text;
         return headerTitle;
     }
 
-    getContainer() {
+    async getContainer(): Promise<HTMLElement> {
         return this.container;
     }
 }
