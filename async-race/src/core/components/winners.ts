@@ -110,14 +110,14 @@ class Winners extends Component {
         const [num, model, name, wins, time] = [number, carModel, carName, carWins, carBestTime];
         const [carWinsUp, carWinsDown] = this.generateUpDownNavigation();
         const [carBestTimeUp, carBestTimeDown] = this.generateUpDownNavigation();
-        num.textContent = 'number';
-        model.textContent = 'car';
-        name.textContent = 'name';
-        wins.textContent = 'wins';
-        time.textContent = 'best time';
+        num.textContent = 'Number';
+        model.textContent = 'Car';
+        name.textContent = 'Name';
+        wins.textContent = 'Wins';
+        time.textContent = 'Best time';
         wins.classList.add('winners__navigation-item-toggle');
         wins.append(carWinsUp, carWinsDown);
-        time.textContent = `best time`;
+        time.textContent = `Best time`;
         time.classList.add('winners__navigation-item-toggle');
         time.append(carBestTimeUp, carBestTimeDown);
       }

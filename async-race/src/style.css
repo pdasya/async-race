@@ -1,3 +1,22 @@
+@font-face {
+    font-family: Akzidenz;
+    font-weight: 700;
+    font-style: normal;
+    src: url("../src/assets/fonts/AkzidenzGroteskPro-BoldEx.otf") format("opentype");
+  }
+  @font-face {
+    font-family: Akzidenz;
+    font-weight: 500;
+    font-style: normal;
+    src: url("../src/assets/fonts/AkzidenzGroteskPro-Md.otf") format("opentype");
+  }
+  @font-face {
+    font-family: Akzidenz;
+    font-weight: 400;
+    font-style: normal;
+    src: url("../src/assets/fonts/AkzidenzGroteskPro-Regular.otf") format("opentype");
+  }
+
 :root {
     --white: #FFFFFA;
     --black: #4A4A48;
@@ -23,10 +42,16 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    font-family: Akzidenz, sistem-ui, sans-serif;
 }
 
 html, body {
     height: 100%;
+}
+
+button {
+    border-radius: 30px;
+    padding: 5px;
 }
 
 .page-wrapper {
@@ -136,9 +161,9 @@ html, body {
 .car__container {
     width: 100%;
     height: 100%;
-    background-color: #1f2937;
+    background-color: var(--background);
     display: flex;
-    border-bottom: 6px dashed var(--black);
+    border-bottom: 10px dashed var(--black);
 }
 
 .car__button-select,
@@ -219,7 +244,7 @@ html, body {
 .car__finish-line {
     position: absolute;
     right: 100px;
-    width: 30px;
+    width: 50px;
     height: 60px;
 }
 
@@ -249,6 +274,7 @@ html, body {
     font-size: 1.3rem;
     font-weight: bold;
     color: var(--black);
+    margin-top: 10px;
 }
 
 .car-generator {
@@ -279,7 +305,7 @@ html, body {
 }
 
 .car-generator__color {
-    width: 3rem;
+    width: 5rem;
     height: 3rem;
     border: 1px solid #000;
     cursor: pointer;
@@ -313,6 +339,7 @@ html, body {
     display: flex;
     width: 28rem;
     gap: 20px;
+    margin-top: 10px;
 }
 
 .car-generator__button {
@@ -421,8 +448,13 @@ html, body {
     padding-bottom: 50px;
   }
 
+  .winners__page {
+    margin-top: 10px;
+  }
+
   .winners__navigation {
-    background-color: var(--gray);
+    font-weight: 500;
+    background-color: var(--background);
     width: 100%;
     height: 30px;
     display: flex;
@@ -467,6 +499,7 @@ html, body {
   }
 
   .winners__car {
+    font-weight: 500;
     background-color: var(--darkgray);
     width: 100%;
     height: 50px;
