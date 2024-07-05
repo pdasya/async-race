@@ -7,7 +7,7 @@ const links = [
         link: Links.author,
     },
     {
-        text: '<img class="school__logo" src="https://rs.school/images/rs_school_js.svg" alt="rs_school_js" id="rs-school" />',
+        text: 'RS School',
         link: Links.course,
     },
 ];
