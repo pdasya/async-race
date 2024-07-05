@@ -52,7 +52,7 @@ const baseConfig = {
     },
     output: {
         filename: 'index.[contenthash].js',
-        path: path.resolve(__dirname, '../dist'),
+        path: path.resolve(__dirname, './dist'),
     },
     plugins: [new CleanWebpackPlugin()],
 };
