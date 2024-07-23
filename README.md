@@ -1,12 +1,21 @@
 # Async Race application. Racing browser game
 
-Deploy ling: https://async-race-pdasya.netlify.app/
+### Installation
 
-Please follow instructions to set up server for the app: https://github.com/mikhama/async-race-api
+1. **Clone the repository**
 
-Stack: 
-HTML
-CSS
-SASS
-Typescript
-Webpack
+   ```bash
+   git clone git@github.com:pdasya/async-race.git
+
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+
+   ```
+
+3. **Start server**
+
+    Follow instructions [here](https://github.com/mikhama/async-race-api)
